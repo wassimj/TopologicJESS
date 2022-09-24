@@ -68,6 +68,12 @@ if submitted and email and password and idf_uploaded_file and epw_uploaded_file:
     # Get job_id. This id number will be needed for querying and retrieving the job data
     job_id = r.json()['data']
     st.write("JOB ID: "+str(job_id))
+
+    # Debugging only. DELETE LATER
+    time.sleep(30)
+    r = requests.get(JessApi + 'job/file/' + str(job_id) + "/eplusout.err", cookies=cookies)
+    st.write(r.content)
+    # DEBUGGING END
     status = 'STARTING'
     st.write(status)
     i = 0
@@ -92,10 +98,9 @@ if submitted and email and password and idf_uploaded_file and epw_uploaded_file:
     st.write(status)
 
     if status == 'FINISHED':
-        st.write(status)
         # GET specific job output with job_id and file name
         r = requests.get(JessApi + 'job/file/' + str(job_id) + "/eplusout.err", cookies=cookies)
-
+        st.write(r.content)
         err_btn = st.download_button(
                         label="Download ERR file",
                         data=r.content,
