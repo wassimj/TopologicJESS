@@ -30,7 +30,7 @@ with st.form('energy-analysis'):
 
     submitted = st.form_submit_button('Submit')
 
-if submitted email and password and idf_uploaded_file and epw_uploaded_file:
+if submitted and email and password and idf_uploaded_file and epw_uploaded_file:
     if idf_uploaded_file:
         idf_string = stringByUploadedFile(idf_uploaded_file)
         idf_name = idf_uploaded_file.name
