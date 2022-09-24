@@ -34,7 +34,6 @@ if submitted:
     if idf_uploaded_file:
         idf_string = stringByUploadedFile(idf_uploaded_file)
         idf_name = idf_uploaded_file.name
-        st.write(idf_name)
     if epw_uploaded_file:
         epw_string = stringByUploadedFile(epw_uploaded_file)
         epw_name = epw_uploaded_file.name
@@ -43,10 +42,6 @@ if submitted:
     ApiBase = 'https://api.ensims.com/'
     JessApi = ApiBase + "jess_web/api/"
     UserApi = ApiBase + 'users/api/'
-
-    # Test the connection
-    r = requests.get(JessApi + 'info')
-    r.json()
 
     # Set header and body of the POST request
     headers = {'Content-Type': 'application/json'}
@@ -57,13 +52,6 @@ if submitted:
 
     # Keep the cookies
     cookies = r.cookies
-
-    # Check data returned by JEA
-    r.json()
-
-    # detect the current working directory and print it
-    path = os.getcwd()
-    print ("The current working directory is %s" % path)
 
     # upload a file to a particular folder. Be careful that the file name fields and the model/weather fields must match!
     files = [
@@ -81,24 +69,25 @@ if submitted:
     job_id = r.json()['data']
 
     status = 'NOT DONE'
+    status_string = st.write('STARTING')
     i = 0
     progress_bar = st.progress(i)
     while status != 'FINISHED' or status != 'ERROR':
         progress_bar.progress(i)
-        i = i+10
+        i = i+5
         # GET job status with job_id
-        print("Sleeping for 1 minute")
         time.sleep(60)
-        print("Checking job status")
         r = requests.get(JessApi + 'job/status/' + str(job_id), cookies=cookies)
         if r:
             try:
                 status = r.json()['data']['status']
             except:
                 status = 'ERROR'
-            print("Status: ", status)
+            st.write(r.content)
+        status_string.write(status)
 
     if status == 'FINISHED':
+        st.write(status)
         # GET specific job output with job_id and file name
         r = requests.get(JessApi + 'job/file/' + str(job_id) + "/eplusout.err", cookies=cookies)
 
