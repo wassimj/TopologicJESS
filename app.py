@@ -78,7 +78,7 @@ if submitted and email and password and idf_uploaded_file and epw_uploaded_file:
         status = r.json()['data']['status']
         st.write("Job Status: "+status+". Please wait...")
         i = 0
-        with st.spinner("Please wait...")
+        with st.spinner("Please wait..."):
             while status != 'FINISHED' and status != 'TIMED OUT':
                 # GET job status with job_id
                 time.sleep(30)
