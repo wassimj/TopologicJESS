@@ -121,7 +121,7 @@ if st.session_state['status'] and st.session_state['job_id'] and st.session_stat
     download_btn = st.download_button(
                     label="Download "+option+" file",
                     data=err_data,
-                    file_name=str(job_id)+lower(option),
+                    file_name=str(job_id)+"."+option.lower(),
                     mime=mime
                 )
  
