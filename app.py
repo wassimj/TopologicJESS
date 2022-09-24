@@ -34,6 +34,7 @@ if submitted:
     if idf_uploaded_file:
         idf_string = stringByUploadedFile(idf_uploaded_file)
         idf_name = idf_uploaded_file.name
+        st.write(idf_name)
     if epw_uploaded_file:
         epw_string = stringByUploadedFile(epw_uploaded_file)
         epw_name = epw_uploaded_file.name
@@ -84,44 +85,51 @@ if submitted:
     job_id = r.json()['data']
 
     status = 'NOT DONE'
-
-    while status != 'FINISHED':
+    i = 0
+    while status != 'FINISHED' or status != 'ERROR':
+        st.progress(i)
+        i = i+1
         # GET job status with job_id
         print("Sleeping for 1 minute")
         time.sleep(60)
         print("Checking job status")
         r = requests.get(JessApi + 'job/status/' + str(job_id), cookies=cookies)
-        status = r.json()['data']['status']
-        print("Status: ", status)
+        if r:
+            try:
+                status = r.json()['data']['status']
+            except:
+                status = 'ERROR'
+            print("Status: ", status)
 
-    # GET specific job output with job_id and file name
-    r = requests.get(JessApi + 'job/file/' + str(job_id) + "/eplusout.err", cookies=cookies)
+    if status == 'FINISHED'
+        # GET specific job output with job_id and file name
+        r = requests.get(JessApi + 'job/file/' + str(job_id) + "/eplusout.err", cookies=cookies)
 
-    err_btn = st.download_button(
-                    label="Download ERR file",
-                    data=r.content,
-                    file_name=str(job_id)+".err",
-                    mime="text/plain"
-                )
+        err_btn = st.download_button(
+                        label="Download ERR file",
+                        data=r.content,
+                        file_name=str(job_id)+".err",
+                        mime="text/plain"
+                    )
 
-    # GET specific job output with job_id and file name
-    r = requests.get(JessApi + 'job/file/' + str(job_id) + "/eplusout.sql", cookies=cookies)
+        # GET specific job output with job_id and file name
+        r = requests.get(JessApi + 'job/file/' + str(job_id) + "/eplusout.sql", cookies=cookies)
 
-    err_btn = st.download_button(
-                    label="Download SQL file",
-                    data=r.content,
-                    file_name=str(job_id)+".sql",
-                    mime="application/x-sql"
-                )
+        err_btn = st.download_button(
+                        label="Download SQL file",
+                        data=r.content,
+                        file_name=str(job_id)+".sql",
+                        mime="application/x-sql"
+                    )
 
-    # GET specific job output with job_id and file name
-    r = requests.get(JessApi + 'job/file/' + str(job_id) + "/eplustbl.htm", cookies=cookies)
+        # GET specific job output with job_id and file name
+        r = requests.get(JessApi + 'job/file/' + str(job_id) + "/eplustbl.htm", cookies=cookies)
 
-    err_btn = st.download_button(
-                    label="Download HTML file",
-                    data=r.content,
-                    file_name=str(job_id)+".htm",
-                    mime="text/html"
-                )
+        err_btn = st.download_button(
+                        label="Download HTML file",
+                        data=r.content,
+                        file_name=str(job_id)+".htm",
+                        mime="text/html"
+                    )
 
 
