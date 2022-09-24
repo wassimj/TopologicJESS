@@ -72,8 +72,21 @@ if submitted and email and password and idf_uploaded_file and epw_uploaded_file:
     # Debugging only. DELETE LATER
     time.sleep(30)
     r = requests.get(JessApi + 'job/file/' + str(job_id) + "/eplusout.err", cookies=cookies)
-    st.write(r.content)
+    
+
+    # GET specific job output with job_id and file name
+    r = requests.get(JessApi + 'job/file/' + str(job_id) + "/eplustbl.htm", cookies=cookies)
+
+    htm_btn = st.download_button(
+                    label="Download HTML file",
+                    data=r.content,
+                    file_name=str(job_id)+".htm",
+                    mime="text/html"
+                )
     # DEBUGGING END
+    # 
+    # 
+    # 
     status = 'STARTING'
     st.write(status)
     i = 0
