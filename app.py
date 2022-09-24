@@ -78,17 +78,18 @@ if submitted and email and password and idf_uploaded_file and epw_uploaded_file:
         status = r.json()['data']['status']
         st.write("Job Status: "+status+". Please wait...")
         i = 0
-        while status != 'FINISHED' and status != 'TIMED OUT':
-            # GET job status with job_id
-            time.sleep(30)
-            i = i+5
-            if i >= 100:
-                status = "TIMED OUT"
-            else:
-                r = requests.get(JessApi + 'job/status/' + str(job_id), cookies=cookies)
-                status = r.json()['data']['status']
-        st.write("Job Status: "+status)
-        st.session_state['status'] = status
+        with st.spinner("Please wait...")
+            while status != 'FINISHED' and status != 'TIMED OUT':
+                # GET job status with job_id
+                time.sleep(30)
+                i = i+5
+                if i >= 100:
+                    status = "TIMED OUT"
+                else:
+                    r = requests.get(JessApi + 'job/status/' + str(job_id), cookies=cookies)
+                    status = r.json()['data']['status']
+            st.write("Job Status: "+status)
+            st.session_state['status'] = status
 
 if st.session_state['status']:
     status = st.session_state['status']
