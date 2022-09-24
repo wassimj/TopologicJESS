@@ -15,15 +15,15 @@ st.set_page_config(
     page_icon="📊")
 
 submitted = False
+status = None
+job_id = None
+cookies = None
 
 if 'status' not in st.session_state:
-    status = None
     st.session_state['status'] = None
 if 'job_id' not in st.session_state:
-    job_id = None
     st.session_state['job_id'] = None
 if 'cookies' not in st.session_state:
-    cookies = None
     st.session_state['cookies'] = None
 # API endpoints
 ApiBase = 'https://api.ensims.com/'
