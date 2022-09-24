@@ -134,3 +134,5 @@ if status == 'FINISHED' and job_id and cookies:
         status = None
         job_id = None
         cookies = None
+        email = ''
+        password = ''
