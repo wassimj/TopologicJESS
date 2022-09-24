@@ -86,9 +86,10 @@ if submitted:
 
     status = 'NOT DONE'
     i = 0
+    progress_bar = st.progress(i)
     while status != 'FINISHED' or status != 'ERROR':
-        st.progress(i)
-        i = i+1
+        progress_bar.progress(i)
+        i = i+10
         # GET job status with job_id
         print("Sleeping for 1 minute")
         time.sleep(60)
