@@ -50,7 +50,7 @@ if submitted:
 
     # Set header and body of the POST request
     headers = {'Content-Type': 'application/json'}
-    body = {"email": user_email, "password": password}
+    body = {"email": email, "password": password}
 
     # Send request
     r = requests.post(UserApi + 'auth', headers=headers, json=body)
