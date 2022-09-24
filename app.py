@@ -96,7 +96,7 @@ if st.session_state['job_id']:
     job_id = st.session_state['job_id']
 if st.session_state['cookies']:
     cookies = st.session_state['cookies']
-if status == 'FINISHED' and job_id and cookies:
+if st.session_state['status'] and st.session_state['job_id'] and st.session_state['cookies']:
     # GET specific job output with job_id and file name
     r = requests.get(JessApi + 'job/file/' + str(job_id) + "/eplusout.err", cookies=cookies)
     err_btn = st.download_button(
