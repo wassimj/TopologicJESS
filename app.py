@@ -67,9 +67,9 @@ if submitted:
 
     # Get job_id. This id number will be needed for querying and retrieving the job data
     job_id = r.json()['data']
-
+    st.write("JOB ID: "+str(job_id))
     status = 'NOT DONE'
-    status_string = st.write('STARTING')
+    st.write('STARTING')
     i = 0
     progress_bar = st.progress(i)
     while status != 'FINISHED' or status != 'ERROR':
@@ -78,13 +78,13 @@ if submitted:
         # GET job status with job_id
         time.sleep(60)
         r = requests.get(JessApi + 'job/status/' + str(job_id), cookies=cookies)
+        st.write(r.content)
         if r:
             try:
                 status = r.json()['data']['status']
             except:
                 status = 'ERROR'
-            st.write(r.content)
-        status_string.write(status)
+            st.write(status)
 
     if status == 'FINISHED':
         st.write(status)
