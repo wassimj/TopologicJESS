@@ -25,9 +25,7 @@ ApiBase = 'https://api.ensims.com/'
 JessApi = ApiBase + "jess_web/api/"
 UserApi = ApiBase + 'users/api/'
 
-# Set header and body of the POST request
-headers = {'Content-Type': 'application/json'}
-body = {"email": email, "password": password}
+
 
 with st.form('energy-analysis'):
     email = st.text_input('Email')
@@ -42,14 +40,11 @@ with st.form('energy-analysis'):
     submitted = st.form_submit_button('Submit')
 
 if submitted and email and password and idf_uploaded_file and epw_uploaded_file:
-    if idf_uploaded_file:
-        idf_string = stringByUploadedFile(idf_uploaded_file)
-        idf_name = idf_uploaded_file.name
-    if epw_uploaded_file:
-        epw_string = stringByUploadedFile(epw_uploaded_file)
-        epw_name = epw_uploaded_file.name
-
-    
+    # Set header and body of the POST request
+    headers = {'Content-Type': 'application/json'}
+    body = {"email": email, "password": password}
+    idf_name = idf_uploaded_file.name
+    epw_name = epw_uploaded_file.name
 
     # Send request
     r = requests.post(UserApi + 'auth', headers=headers, json=body)
