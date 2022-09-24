@@ -76,7 +76,7 @@ if submitted:
         progress_bar.progress(i)
         i = i+5
         # GET job status with job_id
-        time.sleep(60)
+        time.sleep(30)
         r = requests.get(JessApi + 'job/status/' + str(job_id), cookies=cookies)
         st.write(r.content)
         if r:
