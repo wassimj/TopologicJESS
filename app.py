@@ -63,57 +63,54 @@ if submitted and email and password and idf_uploaded_file and epw_uploaded_file:
 
     # POST with files
     r = requests.post(JessApi + 'job', files=files, cookies=cookies)
-    # Show the returned status
-    st.write(r.json())
     # Get job_id. This id number will be needed for querying and retrieving the job data
-    job_id = r.json()['data']
-    st.write("JOB ID: "+str(job_id))
-    time.sleep(10)
-    r = requests.get(JessApi + 'job/status/' + str(job_id), cookies=cookies)
-    status = r.json()['data']['status']
-    st.write(status)
-    i = 0
-    progress_bar = st.progress(i)
-    while status != 'FINISHED' and status != 'TIMED OUT':
-        # GET job status with job_id
-        time.sleep(30)
-        progress_bar.progress(i)
-        i = i+5
-        if i >= 100:
-            status = "TIMED OUT"
-        else:
-            r = requests.get(JessApi + 'job/status/' + str(job_id), cookies=cookies)
-            status = r.json()['data']['status']
-            st.write(status)
-    st.write(status)
+    if r.json()['ok']:
+        job_id = r.json()['data']
+        st.write("Job Submitted. Job ID: "+str(job_id)+". Please wait...")
+        time.sleep(10)
+        r = requests.get(JessApi + 'job/status/' + str(job_id), cookies=cookies)
+        status = r.json()['data']['status']
+        st.write("Job Status: "+status+". Please wait...")
+        i = 0
+        progress_bar = st.progress(i)
+        while status != 'FINISHED' and status != 'TIMED OUT':
+            # GET job status with job_id
+            time.sleep(30)
+            progress_bar.progress(i)
+            i = i+5
+            if i >= 100:
+                status = "TIMED OUT"
+            else:
+                r = requests.get(JessApi + 'job/status/' + str(job_id), cookies=cookies)
+                status = r.json()['data']['status']
+        st.write("Job Status: "+status)
 
-    if status == 'FINISHED':
-        # GET specific job output with job_id and file name
-        r = requests.get(JessApi + 'job/file/' + str(job_id) + "/eplusout.err", cookies=cookies)
-        st.write(r.content)
-        err_btn = st.download_button(
-                        label="Download ERR file",
-                        data=r.content,
-                        file_name=str(job_id)+".err",
-                        mime="text/plain"
-                    )
+        if status == 'FINISHED':
+            # GET specific job output with job_id and file name
+            r = requests.get(JessApi + 'job/file/' + str(job_id) + "/eplusout.err", cookies=cookies)
+            err_btn = st.download_button(
+                            label="Download ERR file",
+                            data=r.content,
+                            file_name=str(job_id)+".err",
+                            mime="text/plain"
+                        )
 
-        # GET specific job output with job_id and file name
-        r = requests.get(JessApi + 'job/file/' + str(job_id) + "/eplusout.sql", cookies=cookies)
+            # GET specific job output with job_id and file name
+            r = requests.get(JessApi + 'job/file/' + str(job_id) + "/eplusout.sql", cookies=cookies)
 
-        sql_btn = st.download_button(
-                        label="Download SQL file",
-                        data=r.content,
-                        file_name=str(job_id)+".sql",
-                        mime="application/x-sql"
-                    )
+            sql_btn = st.download_button(
+                            label="Download SQL file",
+                            data=r.content,
+                            file_name=str(job_id)+".sql",
+                            mime="application/x-sql"
+                        )
 
-        # GET specific job output with job_id and file name
-        r = requests.get(JessApi + 'job/file/' + str(job_id) + "/eplustbl.htm", cookies=cookies)
+            # GET specific job output with job_id and file name
+            r = requests.get(JessApi + 'job/file/' + str(job_id) + "/eplustbl.htm", cookies=cookies)
 
-        htm_btn = st.download_button(
-                        label="Download HTML file",
-                        data=r.content,
-                        file_name=str(job_id)+".htm",
-                        mime="text/html"
-                    )
+            htm_btn = st.download_button(
+                            label="Download HTML file",
+                            data=r.content,
+                            file_name=str(job_id)+".htm",
+                            mime="text/html"
+                        )
