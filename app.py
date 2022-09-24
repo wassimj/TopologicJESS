@@ -101,7 +101,7 @@ if submitted:
                 status = 'ERROR'
             print("Status: ", status)
 
-    if status == 'FINISHED'
+    if status == 'FINISHED':
         # GET specific job output with job_id and file name
         r = requests.get(JessApi + 'job/file/' + str(job_id) + "/eplusout.err", cookies=cookies)
 
