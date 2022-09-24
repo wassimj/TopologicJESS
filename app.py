@@ -68,7 +68,7 @@ if submitted and email and password and idf_uploaded_file and epw_uploaded_file:
     # Get job_id. This id number will be needed for querying and retrieving the job data
     job_id = r.json()['data']
     st.write("JOB ID: "+str(job_id))
-
+    time.sleep(10)
     r = requests.get(JessApi + 'job/status/' + str(job_id), cookies=cookies)
     status = r.json()['data']['status']
     st.write(status)
