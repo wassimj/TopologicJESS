@@ -15,6 +15,7 @@ st.set_page_config(
     page_icon="📊")
 
 submitted = False
+status = None
 
 if 'status' not in st.session_state:
     st.session_state['status'] = None
