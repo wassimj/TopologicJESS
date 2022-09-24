@@ -22,6 +22,9 @@ if 'status' not in st.session_state:
 if 'job_id' not in st.session_state:
     job_id = None
     st.session_state['job_id'] = None
+if 'cookies' not in st.session_state:
+    cookies = None
+    st.session_state['cookies'] = None
 # API endpoints
 ApiBase = 'https://api.ensims.com/'
 JessApi = ApiBase + "jess_web/api/"
@@ -53,6 +56,7 @@ if submitted and email and password and idf_uploaded_file and epw_uploaded_file:
 
     # Keep the cookies
     cookies = r.cookies
+    st.session_state['cookies'] = cookies
 
     # upload a file to a particular folder. Be careful that the file name fields and the model/weather fields must match!
     # upload a file to a particular folder. Be careful that the file name fields and the model/weather fields must match!
@@ -76,11 +80,9 @@ if submitted and email and password and idf_uploaded_file and epw_uploaded_file:
         status = r.json()['data']['status']
         st.write("Job Status: "+status+". Please wait...")
         i = 0
-        progress_bar = st.progress(i)
         while status != 'FINISHED' and status != 'TIMED OUT':
             # GET job status with job_id
             time.sleep(30)
-            progress_bar.progress(i)
             i = i+5
             if i >= 100:
                 status = "TIMED OUT"
@@ -94,8 +96,9 @@ if st.session_state['status']:
     status = st.session_state['status']
 if st.session_state['job_id']:
     job_id = st.session_state['job_id']
-
-if status == 'FINISHED' and job_id:
+if st.session_state['cookies']:
+    cookies = st.session_state['cookies']
+if status == 'FINISHED' and job_id and cookies:
     # GET specific job output with job_id and file name
     r = requests.get(JessApi + 'job/file/' + str(job_id) + "/eplusout.err", cookies=cookies)
     err_btn = st.download_button(
