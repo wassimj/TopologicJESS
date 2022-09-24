@@ -48,10 +48,6 @@ if submitted:
     r = requests.get(JessApi + 'info')
     r.json()
 
-    # Get log in credential
-    user_email = "wassim.jabi@gmail.com"  # <== ENTER YOUR EMAIL HERE
-    password = "WJ01-Ensims"  # <== ENTER YOUR PASSWORD HERE
-
     # Set header and body of the POST request
     headers = {'Content-Type': 'application/json'}
     body = {"email": user_email, "password": password}
