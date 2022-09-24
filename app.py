@@ -99,30 +99,30 @@ if st.session_state['cookies']:
 if st.session_state['status'] and st.session_state['job_id'] and st.session_state['cookies']:
     # GET specific job output with job_id and file name
     r = requests.get(JessApi + 'job/file/' + str(job_id) + "/eplusout.err", cookies=cookies)
-    err_btn = st.download_button(
-                    label="Download ERR file",
-                    data=r.content,
-                    file_name=str(job_id)+".err",
-                    mime="text/plain"
-                )
-
-    # GET specific job output with job_id and file name
+    err_data = r.content
     r = requests.get(JessApi + 'job/file/' + str(job_id) + "/eplusout.sql", cookies=cookies)
-
-    sql_btn = st.download_button(
-                    label="Download SQL file",
-                    data=r.content,
-                    file_name=str(job_id)+".sql",
-                    mime="application/x-sql"
-                )
-
-    # GET specific job output with job_id and file name
+    sql_data = r.content
     r = requests.get(JessApi + 'job/file/' + str(job_id) + "/eplustbl.htm", cookies=cookies)
+    htm_data = r.content
+    option = st.selectbox(
+    'What file would you like to download?',
+    ('ERR', 'SQL', 'HTM'))
 
-    htm_btn = st.download_button(
-                    label="Download HTML file",
-                    data=r.content,
-                    file_name=str(job_id)+".htm",
-                    mime="text/html"
+    if option == "ERR":
+        data = err_data
+        mime = "text/plain"
+    elif option == "SQL":
+        data = sql_data
+        mime="application/x-sql"
+    else:
+        data = htm_data
+        mime="text/html"
+
+    download_btn = st.download_button(
+                    label="Download "+option+" file",
+                    data=err_data,
+                    file_name=str(job_id)+lower(option),
+                    mime=mime
                 )
+ 
 
