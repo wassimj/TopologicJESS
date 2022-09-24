@@ -73,6 +73,23 @@ if submitted and email and password and idf_uploaded_file and epw_uploaded_file:
     st.write(status)
     i = 0
     progress_bar = st.progress(i)
+
+    # !! This part is not working !!
+    from datetime import date
+
+    today = date.today()
+
+    # YYYY-mm-dd
+    dstr = today.strftime("%Y-%m-%d")
+    print("Retrieve jobs list on " + dstr)
+
+    # GET the list of jobs fit the given criteria
+    filter = {"since": dstr, "till": dstr, "status": "FINISHED"}
+
+    r = requests.get(JessApi + 'jobs', headers=headers, json=filter, cookies=cookies)
+
+    st.write(r.json())
+    '''
     while status != 'FINISHED' or status != 'ERROR' or i <= 100:
         progress_bar.progress(i)
         i = i+5
@@ -120,3 +137,4 @@ if submitted and email and password and idf_uploaded_file and epw_uploaded_file:
                     )
 
 
+        '''
