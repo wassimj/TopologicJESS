@@ -15,22 +15,20 @@ st.set_page_config(
     page_icon="📊")
 
 submitted = False
-status = None
-job_id = None
-cookies = None
 
 if 'status' not in st.session_state:
+    status = None
     st.session_state['status'] = None
 if 'job_id' not in st.session_state:
+    job_id = None
     st.session_state['job_id'] = None
 if 'cookies' not in st.session_state:
+    cookies = None
     st.session_state['cookies'] = None
 # API endpoints
 ApiBase = 'https://api.ensims.com/'
 JessApi = ApiBase + "jess_web/api/"
 UserApi = ApiBase + 'users/api/'
-
-
 
 with st.form('energy-analysis'):
     email = st.text_input('Email')
@@ -127,12 +125,4 @@ if status == 'FINISHED' and job_id and cookies:
                     file_name=str(job_id)+".htm",
                     mime="text/html"
                 )
-    if st.button('Reset'):
-        st.session_state['status'] = None
-        st.session_state['job_id'] = None
-        st.session_state['cookies'] = None
-        status = None
-        job_id = None
-        cookies = None
-        email = ''
-        password = ''
+
