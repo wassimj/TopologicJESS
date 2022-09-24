@@ -15,11 +15,13 @@ st.set_page_config(
     page_icon="📊")
 
 submitted = False
-status = None
 
 if 'status' not in st.session_state:
+    status = None
     st.session_state['status'] = None
-
+if 'job_id' not in st.session_state:
+    job_id = None
+    st.session_state['job_id'] = None
 # API endpoints
 ApiBase = 'https://api.ensims.com/'
 JessApi = ApiBase + "jess_web/api/"
@@ -67,6 +69,7 @@ if submitted and email and password and idf_uploaded_file and epw_uploaded_file:
     # Get job_id. This id number will be needed for querying and retrieving the job data
     if r.json()['ok']:
         job_id = r.json()['data']
+        st.session_state['job_id'] = job_id
         st.write("Job Submitted. Job ID: "+str(job_id)+". Please wait...")
         time.sleep(10)
         r = requests.get(JessApi + 'job/status/' + str(job_id), cookies=cookies)
@@ -89,7 +92,10 @@ if submitted and email and password and idf_uploaded_file and epw_uploaded_file:
 
 if st.session_state['status']:
     status = st.session_state['status']
-if status == 'FINISHED':
+if st.session_state['job_id']:
+    job_id = st.session_state['job_id']
+
+if status == 'FINISHED' and job_id:
     # GET specific job output with job_id and file name
     r = requests.get(JessApi + 'job/file/' + str(job_id) + "/eplusout.err", cookies=cookies)
     err_btn = st.download_button(
