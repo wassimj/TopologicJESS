@@ -12,9 +12,7 @@ def stringByUploadedFile(uploaded_file):
 # PAGE CONFIGURATION
 st.set_page_config(
     page_title="Topologic JESS Test Application",
-    page_icon="📊",
-    layout="wide"
-)
+    page_icon="📊")
 
 submitted = False
 
