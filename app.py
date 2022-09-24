@@ -33,16 +33,12 @@ UserApi = ApiBase + 'users/api/'
 with st.form('energy-analysis'):
     email = st.text_input('Email')
     password = st.text_input('Password', type='password')
-
     idf_uploaded_file = st.file_uploader('Upload IDF File', type='idf')
     epw_uploaded_file = st.file_uploader('Upload EPW File', type='epw')
-
-    idf_string = None
-    epw_string = None
-
     submitted = st.form_submit_button('Submit')
 
 if submitted and email and password and idf_uploaded_file and epw_uploaded_file:
+    submitted = False
     # Set header and body of the POST request
     headers = {'Content-Type': 'application/json'}
     body = {"email": email, "password": password}
@@ -73,7 +69,7 @@ if submitted and email and password and idf_uploaded_file and epw_uploaded_file:
         if r.json()['ok']:
             job_id = r.json()['data']
             st.session_state['job_id'] = job_id
-            st.write("Job Submitted. Job ID: "+str(job_id))
+            st.write("Job Status: SUBMITTED (ID: "+str(job_id)+")")
             time.sleep(10)
             r = requests.get(JessApi + 'job/status/' + str(job_id), cookies=cookies)
             status = r.json()['data']['status']
