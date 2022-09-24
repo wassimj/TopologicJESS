@@ -69,17 +69,17 @@ if submitted and email and password and idf_uploaded_file and epw_uploaded_file:
     # Get job_id. This id number will be needed for querying and retrieving the job data
     job_id = r.json()['data']
     st.write("JOB ID: "+str(job_id))
-    status = 'NOT DONE'
-    st.write('STARTING')
+    status = 'STARTING'
+    st.write(status)
     i = 0
     progress_bar = st.progress(i)
-    while status != 'FINISHED' or status != 'ERROR' or i >= 100:
+    while status != 'FINISHED' or status != 'ERROR' or i <= 100:
         progress_bar.progress(i)
         i = i+5
         # GET job status with job_id
         time.sleep(30)
         r = requests.get(JessApi + 'job/status/' + str(job_id), cookies=cookies)
-        st.write(r.content)
+        st.write(r.json)
         if r:
             try:
                 status = r.json()['data']['status']
