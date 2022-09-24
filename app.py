@@ -74,7 +74,7 @@ if submitted and email and password and idf_uploaded_file and epw_uploaded_file:
     st.write(status)
     i = 0
     progress_bar = st.progress(i)
-    while status != 'FINISHED' or status != 'TIMED OUT':
+    while status != 'FINISHED' and status != 'TIMED OUT':
         # GET job status with job_id
         time.sleep(30)
         progress_bar.progress(i)
