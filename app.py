@@ -55,8 +55,8 @@ if submitted and email and password and idf_uploaded_file and epw_uploaded_file:
 
     # upload a file to a particular folder. Be careful that the file name fields and the model/weather fields must match!
     files = [
-        ('file', (idf_name, open(idf_uploaded_file, 'text/plain')),
-        ('file', (epw_name, open(epw_uploaded_file, 'text/plain')),
+        ('file', (idf_name, open(idf_uploaded_file, 'text/plain'))),
+        ('file', (epw_name, open(epw_uploaded_file, 'text/plain'))),
         ('title', 'Python test case'),
         ('desc', 'This is test submission made from the API example for Streamlit'),
         ('split', 'FALSE')
