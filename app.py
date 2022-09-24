@@ -16,6 +16,9 @@ st.set_page_config(
 
 submitted = False
 
+if 'status' not in st.session_state:
+    st.session_state['status'] = None
+
 with st.form('energy-analysis'):
     email = st.text_input('Email')
     password = st.text_input('Password', type='password')
@@ -84,33 +87,36 @@ if submitted and email and password and idf_uploaded_file and epw_uploaded_file:
                 r = requests.get(JessApi + 'job/status/' + str(job_id), cookies=cookies)
                 status = r.json()['data']['status']
         st.write("Job Status: "+status)
+        st.session_state['status'] = status
 
-        if status == 'FINISHED':
-            # GET specific job output with job_id and file name
-            r = requests.get(JessApi + 'job/file/' + str(job_id) + "/eplusout.err", cookies=cookies)
-            err_btn = st.download_button(
-                            label="Download ERR file",
-                            data=r.content,
-                            file_name=str(job_id)+".err",
-                            mime="text/plain"
-                        )
+if st.session_state['status']:
+    status = st.session_state['status']
+if status == 'FINISHED':
+    # GET specific job output with job_id and file name
+    r = requests.get(JessApi + 'job/file/' + str(job_id) + "/eplusout.err", cookies=cookies)
+    err_btn = st.download_button(
+                    label="Download ERR file",
+                    data=r.content,
+                    file_name=str(job_id)+".err",
+                    mime="text/plain"
+                )
 
-            # GET specific job output with job_id and file name
-            r = requests.get(JessApi + 'job/file/' + str(job_id) + "/eplusout.sql", cookies=cookies)
+    # GET specific job output with job_id and file name
+    r = requests.get(JessApi + 'job/file/' + str(job_id) + "/eplusout.sql", cookies=cookies)
 
-            sql_btn = st.download_button(
-                            label="Download SQL file",
-                            data=r.content,
-                            file_name=str(job_id)+".sql",
-                            mime="application/x-sql"
-                        )
+    sql_btn = st.download_button(
+                    label="Download SQL file",
+                    data=r.content,
+                    file_name=str(job_id)+".sql",
+                    mime="application/x-sql"
+                )
 
-            # GET specific job output with job_id and file name
-            r = requests.get(JessApi + 'job/file/' + str(job_id) + "/eplustbl.htm", cookies=cookies)
+    # GET specific job output with job_id and file name
+    r = requests.get(JessApi + 'job/file/' + str(job_id) + "/eplustbl.htm", cookies=cookies)
 
-            htm_btn = st.download_button(
-                            label="Download HTML file",
-                            data=r.content,
-                            file_name=str(job_id)+".htm",
-                            mime="text/html"
-                        )
+    htm_btn = st.download_button(
+                    label="Download HTML file",
+                    data=r.content,
+                    file_name=str(job_id)+".htm",
+                    mime="text/html"
+                )
