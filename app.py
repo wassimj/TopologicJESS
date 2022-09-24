@@ -84,7 +84,8 @@ if submitted and email and password and idf_uploaded_file and epw_uploaded_file:
     print("Retrieve jobs list on " + dstr)
 
     # GET the list of jobs fit the given criteria
-    filter = {"since": dstr, "till": dstr, "status": "FINISHED"}
+    #filter = {"since": dstr, "till": dstr, "status": "FINISHED"}
+    filter = {"since": dstr, "till": dstr}
 
     r = requests.get(JessApi + 'jobs', headers=headers, json=filter, cookies=cookies)
 
