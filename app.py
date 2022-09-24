@@ -127,3 +127,10 @@ if status == 'FINISHED' and job_id and cookies:
                     file_name=str(job_id)+".htm",
                     mime="text/html"
                 )
+    if st.button('Reset'):
+        st.session_state['status'] = None
+        st.session_state['job_id'] = None
+        st.session_state['cookies'] = None
+        status = None
+        job_id = None
+        cookies = None
