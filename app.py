@@ -55,8 +55,8 @@ if submitted and email and password and idf_uploaded_file and epw_uploaded_file:
 
     # upload a file to a particular folder. Be careful that the file name fields and the model/weather fields must match!
     files = [
-        ('file', (idf_name, idf_uploaded_file.getvalue())),
-        ('file', (epw_name, epw_uploaded_file.getvalue())),
+        ('file', (idf_name, idf_string)),
+        ('file', (epw_name, epw_string)),
         ('title', 'Python test case'),
         ('desc', 'This is test submission made from the API example for Streamlit'),
         ('split', 'FALSE')
@@ -64,7 +64,8 @@ if submitted and email and password and idf_uploaded_file and epw_uploaded_file:
 
     # POST with files
     r = requests.post(JessApi + 'job', files=files, cookies=cookies)
-
+    # Show the returned status
+    st.write(r.json())
     # Get job_id. This id number will be needed for querying and retrieving the job data
     job_id = r.json()['data']
     st.write("JOB ID: "+str(job_id))
@@ -72,7 +73,7 @@ if submitted and email and password and idf_uploaded_file and epw_uploaded_file:
     st.write('STARTING')
     i = 0
     progress_bar = st.progress(i)
-    while status != 'FINISHED' or status != 'ERROR':
+    while status != 'FINISHED' or status != 'ERROR' or i >= 100:
         progress_bar.progress(i)
         i = i+5
         # GET job status with job_id
