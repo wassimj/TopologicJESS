@@ -55,8 +55,8 @@ if submitted and email and password and idf_uploaded_file and epw_uploaded_file:
 
     # upload a file to a particular folder. Be careful that the file name fields and the model/weather fields must match!
     files = [
-        ('file', (idf_name, idf_string)),
-        ('file', (epw_name, epw_string)),
+        ('file', (idf_name, open(idf_uploaded_file, 'text/plain')),
+        ('file', (epw_name, open(epw_uploaded_file, 'text/plain')),
         ('title', 'Python test case'),
         ('desc', 'This is test submission made from the API example for Streamlit'),
         ('split', 'FALSE')
@@ -74,23 +74,6 @@ if submitted and email and password and idf_uploaded_file and epw_uploaded_file:
     i = 0
     progress_bar = st.progress(i)
 
-    # !! This part is not working !!
-    from datetime import date
-
-    today = date.today()
-
-    # YYYY-mm-dd
-    dstr = today.strftime("%Y-%m-%d")
-    print("Retrieve jobs list on " + dstr)
-
-    # GET the list of jobs fit the given criteria
-    #filter = {"since": dstr, "till": dstr, "status": "FINISHED"}
-    filter = {"since": dstr, "till": dstr}
-
-    r = requests.get(JessApi + 'jobs', headers=headers, json=filter, cookies=cookies)
-
-    st.write(r.json())
-    '''
     while status != 'FINISHED' or status != 'ERROR' or i <= 100:
         progress_bar.progress(i)
         i = i+5
@@ -120,7 +103,7 @@ if submitted and email and password and idf_uploaded_file and epw_uploaded_file:
         # GET specific job output with job_id and file name
         r = requests.get(JessApi + 'job/file/' + str(job_id) + "/eplusout.sql", cookies=cookies)
 
-        err_btn = st.download_button(
+        sql_btn = st.download_button(
                         label="Download SQL file",
                         data=r.content,
                         file_name=str(job_id)+".sql",
@@ -130,12 +113,9 @@ if submitted and email and password and idf_uploaded_file and epw_uploaded_file:
         # GET specific job output with job_id and file name
         r = requests.get(JessApi + 'job/file/' + str(job_id) + "/eplustbl.htm", cookies=cookies)
 
-        err_btn = st.download_button(
+        htm_btn = st.download_button(
                         label="Download HTML file",
                         data=r.content,
                         file_name=str(job_id)+".htm",
                         mime="text/html"
                     )
-
-
-        '''
