@@ -66,19 +66,19 @@ if submitted and email and password and idf_uploaded_file and epw_uploaded_file:
         ('split', 'FALSE')
     ]
 
-    # POST with files
-    r = requests.post(JessApi + 'job', files=files, cookies=cookies)
-    # Get job_id. This id number will be needed for querying and retrieving the job data
-    if r.json()['ok']:
-        job_id = r.json()['data']
-        st.session_state['job_id'] = job_id
-        st.write("Job Submitted. Job ID: "+str(job_id)+". Please wait...")
-        time.sleep(10)
-        r = requests.get(JessApi + 'job/status/' + str(job_id), cookies=cookies)
-        status = r.json()['data']['status']
-        st.write("Job Status: "+status+". Please wait...")
-        i = 0
-        with st.spinner("Please wait..."):
+    with st.spinner("Please wait..."):
+        # POST with files
+        r = requests.post(JessApi + 'job', files=files, cookies=cookies)
+        # Get job_id. This id number will be needed for querying and retrieving the job data
+        if r.json()['ok']:
+            job_id = r.json()['data']
+            st.session_state['job_id'] = job_id
+            st.write("Job Submitted. Job ID: "+str(job_id))
+            time.sleep(10)
+            r = requests.get(JessApi + 'job/status/' + str(job_id), cookies=cookies)
+            status = r.json()['data']['status']
+            st.write("Job Status: "+status)
+            i = 0
             while status != 'FINISHED' and status != 'TIMED OUT':
                 # GET job status with job_id
                 time.sleep(30)
