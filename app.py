@@ -20,6 +20,15 @@ status = None
 if 'status' not in st.session_state:
     st.session_state['status'] = None
 
+# API endpoints
+ApiBase = 'https://api.ensims.com/'
+JessApi = ApiBase + "jess_web/api/"
+UserApi = ApiBase + 'users/api/'
+
+# Set header and body of the POST request
+headers = {'Content-Type': 'application/json'}
+body = {"email": email, "password": password}
+
 with st.form('energy-analysis'):
     email = st.text_input('Email')
     password = st.text_input('Password', type='password')
@@ -40,14 +49,7 @@ if submitted and email and password and idf_uploaded_file and epw_uploaded_file:
         epw_string = stringByUploadedFile(epw_uploaded_file)
         epw_name = epw_uploaded_file.name
 
-    # API endpoints
-    ApiBase = 'https://api.ensims.com/'
-    JessApi = ApiBase + "jess_web/api/"
-    UserApi = ApiBase + 'users/api/'
-
-    # Set header and body of the POST request
-    headers = {'Content-Type': 'application/json'}
-    body = {"email": email, "password": password}
+    
 
     # Send request
     r = requests.post(UserApi + 'auth', headers=headers, json=body)
