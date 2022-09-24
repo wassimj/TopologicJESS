@@ -73,19 +73,23 @@ if submitted and email and password and idf_uploaded_file and epw_uploaded_file:
     i = 0
     progress_bar = st.progress(i)
 
-    while status != 'FINISHED' or status != 'ERROR' or i <= 100:
-        progress_bar.progress(i)
-        i = i+5
+    while status != 'FINISHED' or status != 'ERROR' or status != 'TIMED OUT':
         # GET job status with job_id
         time.sleep(30)
-        r = requests.get(JessApi + 'job/status/' + str(job_id), cookies=cookies)
-        st.write(r.json)
-        if r:
-            try:
-                status = r.json()['data']['status']
-            except:
-                status = 'ERROR'
-            st.write(status)
+        progress_bar.progress(i)
+        i = i+5
+        if i >= 100:
+            status = "TIMED OUT"
+        else:
+            r = requests.get(JessApi + 'job/status/' + str(job_id), cookies=cookies)
+            st.write(r.json)
+            if r:
+                try:
+                    status = r.json()['data']['status']
+                except:
+                    status = 'ERROR'
+
+    st.write(status)
 
     if status == 'FINISHED':
         st.write(status)
