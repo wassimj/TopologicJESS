@@ -84,6 +84,7 @@ if submitted and email and password and idf_uploaded_file and epw_uploaded_file:
         else:
             r = requests.get(JessApi + 'job/status/' + str(job_id), cookies=cookies)
             status = r.json()['data']['status']
+            st.write(status)
     st.write(status)
 
     if status == 'FINISHED':
