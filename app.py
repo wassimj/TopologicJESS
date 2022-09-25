@@ -47,7 +47,7 @@ with st.form('energy-analysis'):
     password = st.text_input('Password', type='password')
     idf_uploaded_file = st.file_uploader('Upload IDF File', type='idf')
     epw_uploaded_file = st.file_uploader('Upload EPW File', type='epw')
-    max_sim_time = st.number_input("Maximum Simulation Time", min_value=30, max_value=7200, value=300, step=5)
+    max_sim_time = st.number_input("Maximum Simulation Time", min_value=30, max_value=7200, value=300, step=5, format="%d seconds")
     submitted = st.form_submit_button('Submit')
 
 if submitted and email and password and idf_uploaded_file and epw_uploaded_file:
