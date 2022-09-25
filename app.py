@@ -81,6 +81,7 @@ if submitted and email and password and idf_uploaded_file and epw_uploaded_file:
         status = 'UNKNOWN'
         if st.button('Cancel Job'):
             status = 'CANCELLED'
+            st.warning('Job Status: CANCELLED', icon="⚠️")
         else:
         # POST with files
             r = requests.post(JessApi + 'job', files=files, cookies=cookies)
