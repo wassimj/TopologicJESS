@@ -148,7 +148,7 @@ if st.session_state['status'] == 'FINISHED' and st.session_state['job_id'] and s
         csv_data = r.content
     col1, col2, col3 = st.columns([1,16,1],gap="small")
     with col1:
-        st.wrtie(" ")
+        st.write(" ")
     with col2:
         err_download_btn = st.download_button(
                     label=str(job_id)+".err",
@@ -175,7 +175,7 @@ if st.session_state['status'] == 'FINISHED' and st.session_state['job_id'] and s
                     mime="text/csv"
                 )
     with col3:
-        st.wrtie(" ")
+        st.write(" ")
     
  
 
