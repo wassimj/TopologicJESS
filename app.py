@@ -126,9 +126,9 @@ with tab2:
     else:
         st.warning('Please log in.', icon="⚠️")
 with tab3:
-    st.markdown("**Job ID "+str(st.session_state['job_id'])+"**")
     if st.session_state['cookies']:
         if ea_submitted:
+            st.markdown("**Job ID "+str(st.session_state['job_id'])+"**")
             status = 'UNKNOWN'
             st.session_state['status'] = status
             if st.button('Cancel Job'):
