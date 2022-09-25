@@ -73,7 +73,7 @@ if not st.session_state['cookies']:
 files = None
 if st.session_state['cookies']:
     st.success('LOGGED IN', icon="✅")
-    if st.button('Cancel Job'):
+    if st.button('Log Out'):
         st.session_state['cookies'] = None
 if st.session_state['cookies']:
     with st.form('energy-analysis'):
