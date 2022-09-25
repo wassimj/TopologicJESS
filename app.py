@@ -16,6 +16,9 @@ st.set_page_config(
 
 submitted = False
 
+if 'attempts' not in st.session_state:
+    attempts = -1
+    st.session_state['attempts'] = -1
 if 'status' not in st.session_state:
     status = None
     st.session_state['status'] = None
@@ -47,6 +50,11 @@ tab1, tab2, tab3, tab4 = st.tabs(["Authentication", "Submission", "Status", "His
 
 with tab1:
     if not st.session_state['cookies']:
+        if st.session_state['attempts'] == -1:
+            st.session_state['attempts'] = 1
+        else:
+            st.session_state['attempts'] = st.session_state['attempts']*60
+        time.sleep(st.session_state['attempts'])
         with st.expander("Terms of Service", expanded = False):
             st.markdown("**Disclaimer**. This software and any service provided by this software is not guaranteed to be free from defects. This software and any service provided by this software is provided **as is** and you use them at your own risk. No warranties as to performance, merchantability, fitness for a particular purpose, or any other warranties whether expressed or implied are made. No oral or written communication from or information provided by the authors of this software and any services provided by this software shall create a warranty. Under no circumstances shall the authors of this software or any services provided by this software be liable for direct, indirect, special, incidental, or consequential damages resulting from the use, misuse, or inability to use this software or any services provided by this software, even if the authors of this software or any services provided by this software have been advised of the possibility of such damages.")
             st.markdown("**No Reverse Engineering**. You may not, and you agree not to or enable others to, copy, decompile, reverse engineer, disassemble, attempt to derive the source code of, decrypt, modify, or create derivative works of this software or any services provided by this software, or any part thereof (except as and only to the extent any foregoing restriction is prohibited by applicable law or to the extent as may be permitted by the licensing terms governing use of open-sourced components included with this software and any services provided by this software).")
@@ -88,6 +96,8 @@ with tab1:
             if st.button('Log Out'):
                 cookies = None
                 st.session_state['cookies'] = None
+                st.session_state['attempts'] = -1
+                time.sleep(5)
 with tab2:
     if st.session_state['cookies']:
         with st.form('energy-analysis'):
