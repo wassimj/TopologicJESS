@@ -168,8 +168,6 @@ with tab3:
                     st.error('Job Status: REJECTED', icon="⚠️")
                 else:
                     st.info("Job Status: "+status)
-    else:
-        st.warning('Please log in.', icon="⚠️")
 
     if st.session_state['status'] == 'FINISHED' and st.session_state['job_id'] and st.session_state['cookies']:
         # GET specific job output with job_id and file name
@@ -223,6 +221,8 @@ with tab3:
                             file_name=str(st.session_state['job_id'])+".csv",
                             mime="text/csv"
                         )
+    else:
+        st.warning('Please log in.', icon="⚠️")
 
 with tab4:
     if st.session_state['cookies']:
