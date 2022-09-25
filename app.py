@@ -146,30 +146,27 @@ if st.session_state['status'] == 'FINISHED' and st.session_state['job_id'] and s
     else:
         r = requests.get(JessApi + 'job/file/' + str(job_id) + "/epluszsz.csv", cookies=cookies)
         csv_data = r.content
-    col1, col2, col3, col4 = st.columns(4, gap="large")
+    col1, col2, col3 = st.columns(3, gap="small")
 
-    with col1:
+    with col2:
         err_download_btn = st.download_button(
                     label=str(job_id)+".err",
                     data=err_data,
                     file_name=str(job_id)+".err",
                     mime="text/plain"
                 )
-    with col2:
         sql_download_btn = st.download_button(
                     label=str(job_id)+".sql",
                     data=sql_data,
                     file_name=str(job_id)+".sql",
                     mime="application/x-sql"
                 )
-    with col3:
         htm_download_btn = st.download_button(
                     label=str(job_id)+".htm",
                     data=htm_data,
                     file_name=str(job_id)+".htm",
                     mime="text/html"
                 )
-    with col4:
         htm_download_btn = st.download_button(
                     label=str(job_id)+".csv",
                     data=csv_data,
