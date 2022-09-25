@@ -124,6 +124,7 @@ with tab2:
     else:
         st.warning('Please log in.', icon="⚠️")
 with tab3:
+    st.markdown("**Job ID "+str(st.session_state['job_id'])+":**")
     if st.session_state['cookies'] and ea_submitted:
         status = 'UNKNOWN'
         st.session_state['status'] = status
@@ -193,7 +194,6 @@ with tab3:
             r = requests.get(JessApi + 'job/file/' + str(st.session_state['job_id']) + "/epluszsz.csv", cookies=st.session_state['cookies'])
             csv_data = r.content
         with st.expander("Job Results", expanded=True):
-            st.markdown("**ID "+str(st.session_state['job_id'])+":**")
             col1, col2, col3, col4 = st.columns(4, gap="medium")
             with col1:
                 err_download_btn = st.download_button(
