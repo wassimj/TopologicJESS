@@ -92,7 +92,6 @@ if st.session_state['cookies']:
             st.session_state['htm_data'] = None
             idf_name = idf_uploaded_file.name
             epw_name = epw_uploaded_file.name
-            st.write("DEBUG: Submitting Job.")
 
             # upload a file to a particular folder. Be careful that the file name fields and the model/weather fields must match!
             # upload a file to a particular folder. Be careful that the file name fields and the model/weather fields must match!
@@ -120,7 +119,7 @@ if st.session_state['cookies']:
                 if r.json()['ok']:
                     job_id = r.json()['data']
                     st.session_state['job_id'] = job_id
-                    st.info("Job Status: SUBMITTED (ID: "+str(job_id)+")", icon="✅")
+                    st.info("Job Status: SUBMITTED (ID: "+str(job_id)+")", icon="ℹ️")
                 i = 0
                 while status != 'FINISHED' and status != 'TIMED OUT' and status != 'CANCELLED' and status != 'REJECTED':
                     # GET job status with job_id
