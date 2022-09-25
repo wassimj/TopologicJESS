@@ -133,7 +133,8 @@ with tab2:
                         st.session_state['job_id'] = job_id
                         st.info("Job Status: SUBMITTED (ID: "+str(job_id)+")", icon="ℹ️")
 with tab3:
-    if st.session_state['cookies']:
+    if st.session_state['cookies'] and ea_submitted:
+        ea_submitted = False
         with st.expander("Job Status", expanded=True):
             with st.spinner("Please wait..."):
                 i = 0
