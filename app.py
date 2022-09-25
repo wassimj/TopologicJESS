@@ -171,52 +171,52 @@ with tab3:
         if st.session_state['err_data']:
             err_data = st.session_state['err_data']
         else:
-            r = requests.get(JessApi + 'job/file/' + str(job_id) + "/eplusout.err", cookies=cookies)
+            r = requests.get(JessApi + 'job/file/' + str(st.session_state['job_id']) + "/eplusout.err", cookies=cookies)
             err_data = r.content
         if st.session_state['sql_data']:
             sql_data = st.session_state['sql_data']
         else:
-            r = requests.get(JessApi + 'job/file/' + str(job_id) + "/eplusout.sql", cookies=cookies)
+            r = requests.get(JessApi + 'job/file/' + str(st.session_state['job_id']) + "/eplusout.sql", cookies=cookies)
             sql_data = r.content
         if st.session_state['htm_data']:
             htm_data = st.session_state['htm_data']
         else:
-            r = requests.get(JessApi + 'job/file/' + str(job_id) + "/eplustbl.htm", cookies=cookies)
+            r = requests.get(JessApi + 'job/file/' + str(st.session_state['job_id']) + "/eplustbl.htm", cookies=cookies)
             htm_data = r.content
         if st.session_state['csv_data']:
             csv_data = st.session_state['csv_data']
         else:
-            r = requests.get(JessApi + 'job/file/' + str(job_id) + "/epluszsz.csv", cookies=cookies)
+            r = requests.get(JessApi + 'job/file/' + str(st.session_state['job_id']) + "/epluszsz.csv", cookies=cookies)
             csv_data = r.content
         with st.expander("Job Results", expanded=True):
-            st.markdown("**ID "+str(job_id)+":**")
+            st.markdown("**ID "+str(st.session_state['job_id'])+":**")
             col1, col2, col3, col4 = st.columns(4, gap="medium")
             with col1:
                 err_download_btn = st.download_button(
-                            label=str(job_id)+".err",
+                            label=str(st.session_state['job_id'])+".err",
                             data=err_data,
-                            file_name=str(job_id)+".err",
+                            file_name=str(st.session_state['job_id'])+".err",
                             mime="text/plain"
                         )
             with col2:
                 sql_download_btn = st.download_button(
-                            label=str(job_id)+".sql",
+                            label=str(st.session_state['job_id'])+".sql",
                             data=sql_data,
-                            file_name=str(job_id)+".sql",
+                            file_name=str(st.session_state['job_id'])+".sql",
                             mime="application/x-sql"
                         )
             with col3:
                 htm_download_btn = st.download_button(
-                            label=str(job_id)+".htm",
+                            label=str(st.session_state['job_id'])+".htm",
                             data=htm_data,
-                            file_name=str(job_id)+".htm",
+                            file_name=str(st.session_state['job_id'])+".htm",
                             mime="text/html"
                         )
             with col4:
                 htm_download_btn = st.download_button(
-                            label=str(job_id)+".csv",
+                            label=str(st.session_state['job_id'])+".csv",
                             data=csv_data,
-                            file_name=str(job_id)+".csv",
+                            file_name=str(st.session_state['job_id'])+".csv",
                             mime="text/csv"
                         )
 with tab4:
