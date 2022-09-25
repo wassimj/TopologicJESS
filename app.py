@@ -154,7 +154,7 @@ if st.session_state['status'] and st.session_state['job_id'] and st.session_stat
     with col3:
         htm_download_btn = st.download_button(
                     label="Download HTM file",
-                    data=sql_data,
+                    data=htm_data,
                     file_name=str(job_id)+".htm",
                     mime="text/html"
                 )
