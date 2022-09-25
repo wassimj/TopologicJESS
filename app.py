@@ -45,15 +45,15 @@ UserApi = ApiBase + 'users/api/'
 with st.form('Authentication'):
     email = st.text_input('Email')
     password = st.text_input('Password', type='password')
-    submitted = st.form_submit_button('Submit')
-if submitted and (not email or not password):
+    auth_submitted = st.form_submit_button('Submit')
+if auth_submitted and (not email or not password):
     if not email:
         st.warning('Email address is missing', icon="⚠️")
         st.session_state['cookies'] = None
     if not password:
         st.warning('Password is missing', icon="⚠️")
         st.session_state['cookies'] = None
-elif submitted and email and password:
+elif auth_submitted and email and password:
     # Set header and body of the POST request
     headers = {'Content-Type': 'application/json'}
     body = {"email": email, "password": password}
@@ -73,15 +73,15 @@ elif submitted and email and password:
             idf_uploaded_file = st.file_uploader('Upload IDF File', type='idf')
             epw_uploaded_file = st.file_uploader('Upload EPW File', type='epw')
             max_sim_time = st.number_input("Maximum Simulation Time (seconds)", min_value=30, max_value=14400, value=300, step=5)
-            submitted = st.form_submit_button('Submit')
+            ea_submitted = st.form_submit_button('Submit')
 
-        if submitted and (not idf_uploaded_file or not epw_uploaded_file):
+        if ea_submitted and (not idf_uploaded_file or not epw_uploaded_file):
             if not idf_uploaded_file:
                 st.warning('IDF file is missing', icon="⚠️")
             if not epw_uploaded_file:
                 st.warning('EPW file is missing', icon="⚠️")
-        elif submitted and idf_uploaded_file and epw_uploaded_file:
-            submitted = False
+        elif ea_submitted and idf_uploaded_file and epw_uploaded_file:
+            ea_submitted = False
             err_data = None
             st.session_state['err_data'] = None
             sql_data = None
