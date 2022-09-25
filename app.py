@@ -41,6 +41,7 @@ if 'csv_data' not in st.session_state:
 ApiBase = 'https://api.ensims.com/'
 JessApi = ApiBase + "jess_web/api/"
 UserApi = ApiBase + 'users/api/'
+files = None
 
 if not st.session_state['cookies']:
     with st.form('Authentication'):
@@ -68,12 +69,11 @@ if not st.session_state['cookies']:
                 # Keep the cookies
                 cookies = r.cookies
                 st.session_state['cookies'] = cookies
-                st.success('LOGGED IN', icon="✅")
 
-files = None
 if st.session_state['cookies']:
     st.success('LOGGED IN', icon="✅")
     if st.button('Log Out'):
+        cookies = None
         st.session_state['cookies'] = None
 if st.session_state['cookies']:
     with st.form('energy-analysis'):
