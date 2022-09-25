@@ -171,22 +171,22 @@ with tab3:
         if st.session_state['err_data']:
             err_data = st.session_state['err_data']
         else:
-            r = requests.get(JessApi + 'job/file/' + str(st.session_state['job_id']) + "/eplusout.err", cookies=cookies)
+            r = requests.get(JessApi + 'job/file/' + str(st.session_state['job_id']) + "/eplusout.err", cookies=st.session_state['cookies'])
             err_data = r.content
         if st.session_state['sql_data']:
             sql_data = st.session_state['sql_data']
         else:
-            r = requests.get(JessApi + 'job/file/' + str(st.session_state['job_id']) + "/eplusout.sql", cookies=cookies)
+            r = requests.get(JessApi + 'job/file/' + str(st.session_state['job_id']) + "/eplusout.sql", cookies=st.session_state['cookies'])
             sql_data = r.content
         if st.session_state['htm_data']:
             htm_data = st.session_state['htm_data']
         else:
-            r = requests.get(JessApi + 'job/file/' + str(st.session_state['job_id']) + "/eplustbl.htm", cookies=cookies)
+            r = requests.get(JessApi + 'job/file/' + str(st.session_state['job_id']) + "/eplustbl.htm", cookies=st.session_state['cookies'])
             htm_data = r.content
         if st.session_state['csv_data']:
             csv_data = st.session_state['csv_data']
         else:
-            r = requests.get(JessApi + 'job/file/' + str(st.session_state['job_id']) + "/epluszsz.csv", cookies=cookies)
+            r = requests.get(JessApi + 'job/file/' + str(st.session_state['job_id']) + "/epluszsz.csv", cookies=st.session_state['cookies'])
             csv_data = r.content
         with st.expander("Job Results", expanded=True):
             st.markdown("**ID "+str(st.session_state['job_id'])+":**")
