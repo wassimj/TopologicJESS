@@ -127,48 +127,52 @@ with tab2:
         st.warning('Please log in.', icon="⚠️")
 with tab3:
     st.markdown("**Job ID "+str(st.session_state['job_id'])+"**")
-    if st.session_state['cookies'] and ea_submitted:
-        status = 'UNKNOWN'
-        st.session_state['status'] = status
-        if st.button('Cancel Job'):
-            status = 'CANCELLED'
+    if st.session_state['cookies']:
+        if ea_submitted:
+            status = 'UNKNOWN'
             st.session_state['status'] = status
-            st.warning('Job Status: CANCELLED', icon="⚠️")
-            # Make a post request. Session token must be available in the saved cookies during log-on
-            r = requests.post('https://api.ensims.com/jess_web/api/job/' + str(st.session_state['job_id']), headers={'Content-Type': 'application/json'}, json={"cmd": "Cancel"}, cookies=st.session_state['cookies'])
-            st.write(r.json())
-        ea_submitted = False
-        with st.expander("Job Status", expanded=True):
-            with st.spinner("Please wait..."):
-                i = 0
-                while st.session_state['status'] != 'FINISHED' and st.session_state['status'] != 'TIMED OUT' and st.session_state['status'] != 'CANCELLED' and st.session_state['status'] != 'REJECTED':
-                    # GET job status with job_id
-                    time.sleep(30)
-                    i = i+30
-                    if i >= max_sim_time:
-                        status = "TIMED OUT"
-                        st.session_state['status'] = status
-                        r = requests.post('https://api.ensims.com/jess_web/api/job/' + str(st.session_state['job_id']), headers={'Content-Type': 'application/json'}, json={"cmd": "Cancel"}, cookies=st.session_state['cookies'])
+            if st.button('Cancel Job'):
+                status = 'CANCELLED'
+                st.session_state['status'] = status
+                st.warning('Job Status: CANCELLED', icon="⚠️")
+                # Make a post request. Session token must be available in the saved cookies during log-on
+                r = requests.post('https://api.ensims.com/jess_web/api/job/' + str(st.session_state['job_id']), headers={'Content-Type': 'application/json'}, json={"cmd": "Cancel"}, cookies=st.session_state['cookies'])
+                st.write(r.json())
+            ea_submitted = False
+            with st.expander("Job Status", expanded=True):
+                with st.spinner("Please wait..."):
+                    i = 0
+                    while st.session_state['status'] != 'FINISHED' and st.session_state['status'] != 'TIMED OUT' and st.session_state['status'] != 'CANCELLED' and st.session_state['status'] != 'REJECTED':
+                        # GET job status with job_id
+                        time.sleep(30)
+                        i = i+30
+                        if i >= max_sim_time:
+                            status = "TIMED OUT"
+                            st.session_state['status'] = status
+                            r = requests.post('https://api.ensims.com/jess_web/api/job/' + str(st.session_state['job_id']), headers={'Content-Type': 'application/json'}, json={"cmd": "Cancel"}, cookies=st.session_state['cookies'])
+                        else:
+                            r = requests.get(JessApi + 'job/status/' + str(st.session_state['job_id']), cookies=st.session_state['cookies'])
+                            try:
+                                status = r.json()['data']['status']
+                                st.session_state['status'] = status
+                                if status != "FINISHED" and status != "CANCELLED" and status != "TIMED OUT" and status != "REJECTED":
+                                    st.info("Job Status: "+status, icon="ℹ️")
+                            except:
+                                st.warning('Job Status: UNKNOWN', icon="⚠️")
+                                status = 'UNKNOWN'
+                                st.session_state['status'] = status
+                    if st.session_state['status'] == 'TIMED OUT':
+                        st.error(' Job Status: TIMED OUT', icon="⚠️")
+                    elif st.session_state['status'] == 'CANCELLED':
+                        st.error('Job Status: CANCELLED', icon="⚠️")
+                    elif st.session_state['status'] == 'REJECTED':
+                        st.error('Job Status: REJECTED', icon="⚠️")
                     else:
-                        r = requests.get(JessApi + 'job/status/' + str(st.session_state['job_id']), cookies=st.session_state['cookies'])
-                        try:
-                            status = r.json()['data']['status']
-                            st.session_state['status'] = status
-                            if status != "FINISHED" and status != "CANCELLED" and status != "TIMED OUT" and status != "REJECTED":
-                                st.info("Job Status: "+status, icon="ℹ️")
-                        except:
-                            st.warning('Job Status: UNKNOWN', icon="⚠️")
-                            status = 'UNKNOWN'
-                            st.session_state['status'] = status
-                if st.session_state['status'] == 'TIMED OUT':
-                    st.error(' Job Status: TIMED OUT', icon="⚠️")
-                elif st.session_state['status'] == 'CANCELLED':
-                    st.error('Job Status: CANCELLED', icon="⚠️")
-                elif st.session_state['status'] == 'REJECTED':
-                    st.error('Job Status: REJECTED', icon="⚠️")
-                else:
-                    st.info("Job Status: "+status)
-
+                        st.info("Job Status: "+status)
+        else:
+            st.warning('Please submit a job.', icon="⚠️")
+    else:
+        st.warning('Please log in.', icon="⚠️")
     if st.session_state['status'] == 'FINISHED' and st.session_state['job_id'] and st.session_state['cookies']:
         st.success('Job Status: FINISHED', icon="✅")
         # GET specific job output with job_id and file name
@@ -222,8 +226,6 @@ with tab3:
                             file_name=str(st.session_state['job_id'])+".csv",
                             mime="text/csv"
                         )
-    else:
-        st.warning('Please log in.', icon="⚠️")
 
 with tab4:
     if st.session_state['cookies']:
