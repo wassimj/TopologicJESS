@@ -136,7 +136,7 @@ if st.session_state['status'] and st.session_state['job_id'] and st.session_stat
     else:
         r = requests.get(JessApi + 'job/file/' + str(job_id) + "/eplustbl.htm", cookies=cookies)
         htm_data = r.content
-    col1, col2, col3, col4 = st.columns(1,1,1,1.5)
+    col1, col2, col3, col4 = st.columns(1.0,1.0,1.0,1.5)
 
     with col1:
         err_download_btn = st.download_button(
