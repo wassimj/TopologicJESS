@@ -90,7 +90,7 @@ elif auth_submitted and email and password:
             st.session_state['htm_data'] = None
             idf_name = idf_uploaded_file.name
             epw_name = epw_uploaded_file.name
-    
+            st.write("DEBUG: Submitting Job.")
 
             # upload a file to a particular folder. Be careful that the file name fields and the model/weather fields must match!
             # upload a file to a particular folder. Be careful that the file name fields and the model/weather fields must match!
