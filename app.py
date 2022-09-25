@@ -200,7 +200,15 @@ if st.session_state['status'] == 'FINISHED' and st.session_state['job_id'] and s
                         mime="text/csv"
                     )
 
-with st.expanded("Jobs List", expanded="False"):
-    r = requests.get(JessApi + 'jobs', headers=headers, cookies=st.session_state['cookies'])
-    st.write(r.json())
+if st.session_state['cookies']:
+    with st.expanded("Finished Jobs List", expanded="False"):
+        # GET the list of jobs fit the given criteria
+        filter = {"status": "FINISHED"}
+        r = requests.get(JessApi + 'jobs', headers={'Content-Type': 'application/json'}, json=filter, cookies=st.session_state['cookies'])
+        st.write(r.json())
+    with st.expanded("Rejected Jobs List", expanded="False"):
+        # GET the list of jobs fit the given criteria
+        filter = {"status": "REJECTED"}
+        r = requests.get(JessApi + 'jobs', headers={'Content-Type': 'application/json'}, json=filter, cookies=st.session_state['cookies'])
+        st.write(r.json())
 
