@@ -25,6 +25,15 @@ if 'job_id' not in st.session_state:
 if 'cookies' not in st.session_state:
     cookies = None
     st.session_state['cookies'] = None
+if 'err_data' not in st.session_state:
+    err_data = None
+    st.session_state['err_data'] = None
+if 'sql_data' not in st.session_state:
+    sql_data = None
+    st.session_state['sql_data'] = None
+if 'htm_data' not in st.session_state:
+    htm_data = None
+    st.session_state['htm_data'] = None
 # API endpoints
 ApiBase = 'https://api.ensims.com/'
 JessApi = ApiBase + "jess_web/api/"
@@ -39,6 +48,12 @@ with st.form('energy-analysis'):
 
 if submitted and email and password and idf_uploaded_file and epw_uploaded_file:
     submitted = False
+    err_data = None
+    st.session_state['err_data'] = None
+    sql_data = None
+    st.session_state['sql_data'] = None
+    htm_data = None
+    st.session_state['htm_data'] = None
     # Set header and body of the POST request
     headers = {'Content-Type': 'application/json'}
     body = {"email": email, "password": password}
@@ -70,7 +85,7 @@ if submitted and email and password and idf_uploaded_file and epw_uploaded_file:
         if r.json()['ok']:
             job_id = r.json()['data']
             st.session_state['job_id'] = job_id
-            st.info("Job Status: SUBMITTED (ID: "+str(job_id)+")", icon="✅")
+            st.info(" Job Status: SUBMITTED (ID: "+str(job_id)+")", icon="✅")
             #time.sleep(10)
             #r = requests.get(JessApi + 'job/status/' + str(job_id), cookies=cookies)
             #status = r.json()['data']['status']
@@ -90,11 +105,11 @@ if submitted and email and password and idf_uploaded_file and epw_uploaded_file:
                         st.warning('Job Status: UNKNOWN', icon="⚠️")
                         status = 'UNKNOWN'
             if status == 'FINISHED':
-                st.success('Job Status: FINISHED', icon="✅")
+                st.success(' Job Status: FINISHED', icon="✅")
             elif status == 'TIMED OUT':
-                st.error('Job Status: TIMED OUT', icon="⚠️")
+                st.error(' Job Status: TIMED OUT', icon="⚠️")
             else:
-                st.info("Job Status: "+status)
+                st.info(" Job Status: "+status)
             st.session_state['status'] = status
 
 if st.session_state['status']:
@@ -105,31 +120,44 @@ if st.session_state['cookies']:
     cookies = st.session_state['cookies']
 if st.session_state['status'] and st.session_state['job_id'] and st.session_state['cookies']:
     # GET specific job output with job_id and file name
-    r = requests.get(JessApi + 'job/file/' + str(job_id) + "/eplusout.err", cookies=cookies)
-    err_data = r.content
-    r = requests.get(JessApi + 'job/file/' + str(job_id) + "/eplusout.sql", cookies=cookies)
-    sql_data = r.content
-    r = requests.get(JessApi + 'job/file/' + str(job_id) + "/eplustbl.htm", cookies=cookies)
-    htm_data = r.content
-    option = st.selectbox(
-    'What file would you like to download?',
-    ('ERR', 'SQL', 'HTM'))
-
-    if option == "ERR":
-        data = err_data
-        mime = "text/plain"
-    elif option == "SQL":
-        data = sql_data
-        mime="application/x-sql"
+    if st.session_state['err_data']:
+        err_data = st.session_state['err_data']
     else:
-        data = htm_data
-        mime="text/html"
+        r = requests.get(JessApi + 'job/file/' + str(job_id) + "/eplusout.err", cookies=cookies)
+        err_data = r.content
+    if st.session_state['sql_data']:
+        sql_data = st.session_state['sql_data']
+    else:
+        r = requests.get(JessApi + 'job/file/' + str(job_id) + "/eplusout.sql", cookies=cookies)
+        sql_data = r.content
+    if st.session_state['htm_data']:
+        htm_data = st.session_state['htm_data']
+    else:
+        r = requests.get(JessApi + 'job/file/' + str(job_id) + "/eplustbl.htm", cookies=cookies)
+        htm_data = r.content
+    col1, col2, col3 = st.columns(3)
 
-    download_btn = st.download_button(
-                    label="Download "+option+" file",
-                    data=data,
-                    file_name=str(job_id)+"."+option.lower(),
-                    mime=mime
+    with col1:
+        err_download_btn = st.download_button(
+                    label="Download ERR file",
+                    data=err_data,
+                    file_name=str(job_id)+".err",
+                    mime="text/plain"
                 )
+    with col2:
+        sql_download_btn = st.download_button(
+                    label="Download SQL file",
+                    data=sql_data,
+                    file_name=str(job_id)+".sql",
+                    mime="application/x-sql"
+                )
+    with col3:
+        htm_download_btn = st.download_button(
+                    label="Download HTM file",
+                    data=sql_data,
+                    file_name=str(job_id)+".htm",
+                    mime="text/html"
+                )
+    
  
 
