@@ -88,7 +88,7 @@ if submitted and email and password and idf_uploaded_file and epw_uploaded_file:
                         status = r.json()['data']['status']
                     except:
                         status = 'UNKNOWN'
-            if status == 'FINISHED'
+            if status == 'FINISHED':
                 st.success('Job Status: FINISHED', icon="✅")
             elif status == 'TIMED OUT':
                 st.error('Job Status: TIMED OUT', icon="⚠️")
