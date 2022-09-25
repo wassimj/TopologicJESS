@@ -115,6 +115,7 @@ with tab2:
                 ]
                 with st.spinner("Please wait..."):
                     status = 'UNKNOWN'
+                    st.session_state['status'] = status
                     if st.button('Cancel Job'):
                         status = 'CANCELLED'
                         st.session_state['status'] = status
@@ -135,7 +136,7 @@ with tab3:
         with st.expander("Job Status", expanded=True):
             with st.spinner("Please wait..."):
                 i = 0
-                while status != 'FINISHED' and status != 'TIMED OUT' and status != 'CANCELLED' and status != 'REJECTED':
+                while st.session_state['status'] != 'FINISHED' and st.session_state['status'] != 'TIMED OUT' and st.session_state['status'] != 'CANCELLED' and st.session_state['status'] != 'REJECTED':
                     # GET job status with job_id
                     time.sleep(30)
                     i = i+30
