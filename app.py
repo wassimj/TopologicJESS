@@ -146,7 +146,7 @@ if st.session_state['status'] == 'FINISHED' and st.session_state['job_id'] and s
     else:
         r = requests.get(JessApi + 'job/file/' + str(job_id) + "/epluszsz.csv", cookies=cookies)
         csv_data = r.content
-    with st.form('Job Results'):
+    with st.expander("", expanded=True):
         st.markdown("**Job Results for ID "+str(job_id)+":**")
         col1, col2, col3, col4 = st.columns(4, gap="medium")
         with col1:
