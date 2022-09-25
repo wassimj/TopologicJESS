@@ -34,6 +34,9 @@ if 'sql_data' not in st.session_state:
 if 'htm_data' not in st.session_state:
     htm_data = None
     st.session_state['htm_data'] = None
+if 'csv_data' not in st.session_state:
+    csv_data = None
+    st.session_state['csv_data'] = None
 # API endpoints
 ApiBase = 'https://api.ensims.com/'
 JessApi = ApiBase + "jess_web/api/"
@@ -138,7 +141,12 @@ if st.session_state['status'] == 'FINISHED' and st.session_state['job_id'] and s
     else:
         r = requests.get(JessApi + 'job/file/' + str(job_id) + "/eplustbl.htm", cookies=cookies)
         htm_data = r.content
-    col1, col2, col3, col4 = st.columns([1,1,1,1.2], gap="small")
+    if st.session_state['csv_data']:
+        csv_data = st.session_state['csv_data']
+    else:
+        r = requests.get(JessApi + 'job/file/' + str(job_id) + "/epluszsz.csv", cookies=cookies)
+        csv_data = r.content
+    col1, col2, col3, col4 = st.columns(4, gap="small")
 
     with col1:
         err_download_btn = st.download_button(
@@ -160,6 +168,13 @@ if st.session_state['status'] == 'FINISHED' and st.session_state['job_id'] and s
                     data=htm_data,
                     file_name=str(job_id)+".htm",
                     mime="text/html"
+                )
+    with col4:
+        htm_download_btn = st.download_button(
+                    label="Download CSV file",
+                    data=csv_data,
+                    file_name=str(job_id)+".csv",
+                    mime="text/csv"
                 )
     
  
