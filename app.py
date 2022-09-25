@@ -158,9 +158,7 @@ with tab3:
                             st.warning('Job Status: UNKNOWN', icon="⚠️")
                             status = 'UNKNOWN'
                             st.session_state['status'] = status
-                if st.session_state['status'] == 'FINISHED':
-                    st.success('Job Status: FINISHED', icon="✅")
-                elif st.session_state['status'] == 'TIMED OUT':
+                if st.session_state['status'] == 'TIMED OUT':
                     st.error(' Job Status: TIMED OUT', icon="⚠️")
                 elif st.session_state['status'] == 'CANCELLED':
                     st.error('Job Status: CANCELLED', icon="⚠️")
@@ -170,6 +168,7 @@ with tab3:
                     st.info("Job Status: "+status)
 
     if st.session_state['status'] == 'FINISHED' and st.session_state['job_id'] and st.session_state['cookies']:
+        st.success('Job Status: FINISHED', icon="✅")
         # GET specific job output with job_id and file name
         if st.session_state['err_data']:
             err_data = st.session_state['err_data']
