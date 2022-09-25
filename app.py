@@ -209,6 +209,7 @@ if st.session_state['status'] == 'FINISHED' and st.session_state['job_id'] and s
                         mime="text/csv"
                     )
 
+st.write(st.session_state['cookies'])
 if st.session_state['cookies']:
     with st.expander("Finished Jobs List", expanded=False):
         # GET the list of jobs fit the given criteria
