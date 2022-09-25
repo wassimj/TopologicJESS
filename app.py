@@ -71,10 +71,13 @@ if not st.session_state['cookies']:
                 st.session_state['cookies'] = cookies
 
 if st.session_state['cookies']:
-    st.success('LOGGED IN', icon="✅")
-    if st.button('Log Out'):
-        cookies = None
-        st.session_state['cookies'] = None
+    col1, col2 = st.columns(2, gap="small")
+    with col1:
+        st.success('LOGGED IN', icon="✅")
+    with col2:
+        if st.button('Log Out'):
+            cookies = None
+            st.session_state['cookies'] = None
 if st.session_state['cookies']:
     with st.form('energy-analysis'):
         idf_uploaded_file = st.file_uploader('Upload IDF File', type='idf')
