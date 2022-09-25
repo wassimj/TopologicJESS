@@ -70,7 +70,7 @@ if submitted and email and password and idf_uploaded_file and epw_uploaded_file:
         if r.json()['ok']:
             job_id = r.json()['data']
             st.session_state['job_id'] = job_id
-            st.info("Job Status: SUBMITTED (ID: "+str(job_id)+")", icon="ℹ️")
+            st.info("Job Status: SUBMITTED (ID: "+str(job_id)+")", icon="✅")
             #time.sleep(10)
             #r = requests.get(JessApi + 'job/status/' + str(job_id), cookies=cookies)
             #status = r.json()['data']['status']
@@ -87,6 +87,7 @@ if submitted and email and password and idf_uploaded_file and epw_uploaded_file:
                     try:
                         status = r.json()['data']['status']
                     except:
+                        st.warning('Job Status: UNKNOWN', icon="⚠️")
                         status = 'UNKNOWN'
             if status == 'FINISHED':
                 st.success('Job Status: FINISHED', icon="✅")
