@@ -112,18 +112,8 @@ with tab2:
                     ('desc', 'This is test submission made from the API example for Python'),
                     ('split', 'FALSE')
                 ]
-        if ea_submitted:
+        if ea_submitted and files:
             with st.spinner("Please wait..."):
-                status = 'UNKNOWN'
-                st.session_state['status'] = status
-                if st.button('Cancel Job'):
-                    status = 'CANCELLED'
-                    st.session_state['status'] = status
-                    st.warning('Job Status: CANCELLED', icon="⚠️")
-                    # Make a post request. Session token must be available in the saved cookies during log-on
-                    r = requests.post('https://api.ensims.com/jess_web/api/job/' + str(st.session_state['job_id']), headers={'Content-Type': 'application/json'}, json={"cmd": "Cancel"}, cookies=st.session_state['cookies'])
-                    st.write(r.json())
-                elif files:
                 # POST with files
                     r = requests.post(JessApi + 'job', files=files, cookies=st.session_state['cookies'])
                 # Get job_id. This id number will be needed for querying and retrieving the job data
@@ -133,6 +123,15 @@ with tab2:
                         st.info("Job Status: SUBMITTED (ID: "+str(job_id)+")", icon="ℹ️")
 with tab3:
     if st.session_state['cookies'] and ea_submitted:
+        status = 'UNKNOWN'
+        st.session_state['status'] = status
+        if st.button('Cancel Job'):
+            status = 'CANCELLED'
+            st.session_state['status'] = status
+            st.warning('Job Status: CANCELLED', icon="⚠️")
+            # Make a post request. Session token must be available in the saved cookies during log-on
+            r = requests.post('https://api.ensims.com/jess_web/api/job/' + str(st.session_state['job_id']), headers={'Content-Type': 'application/json'}, json={"cmd": "Cancel"}, cookies=st.session_state['cookies'])
+            st.write(r.json())
         ea_submitted = False
         with st.expander("Job Status", expanded=True):
             with st.spinner("Please wait..."):
