@@ -5,14 +5,12 @@ import time
 import os
 
 import streamlit as st
-
-def stringByUploadedFile(uploaded_file):
-    return uploaded_file.getvalue().decode('utf-8')
+import math
 
 # PAGE CONFIGURATION
 st.set_page_config(
     page_title="Topologic JESS Test Application",
-    page_icon="📊")
+    page_icon="🏢")
 
 submitted = False
 
@@ -53,7 +51,7 @@ with tab1:
         if st.session_state['attempts'] == -1:
             st.session_state['attempts'] = 1
         else:
-            st.session_state['attempts'] = st.session_state['attempts']*60
+            st.session_state['attempts'] = st.session_state['attempts'] + math.floor(st.session_state['attempts']*0.1)
         time.sleep(st.session_state['attempts'])
         with st.expander("Terms of Service", expanded = False):
             st.markdown("**Disclaimer**. This software and any service provided by this software is not guaranteed to be free from defects. This software and any service provided by this software is provided **as is** and you use them at your own risk. No warranties as to performance, merchantability, fitness for a particular purpose, or any other warranties whether expressed or implied are made. No oral or written communication from or information provided by the authors of this software and any services provided by this software shall create a warranty. Under no circumstances shall the authors of this software or any services provided by this software be liable for direct, indirect, special, incidental, or consequential damages resulting from the use, misuse, or inability to use this software or any services provided by this software, even if the authors of this software or any services provided by this software have been advised of the possibility of such damages.")
