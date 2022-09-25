@@ -63,7 +63,7 @@ if submitted and email and password and idf_uploaded_file and epw_uploaded_file:
     body = {"email": email, "password": password}
     idf_name = idf_uploaded_file.name
     epw_name = epw_uploaded_file.name
-else:
+elif submitted:
     if not email:
         st.warning('Email address is missing', icon="⚠️")
     if not password:
