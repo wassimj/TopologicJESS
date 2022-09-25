@@ -86,6 +86,8 @@ with tab2:
         with st.form('energy-analysis'):
             idf_uploaded_file = st.file_uploader('Upload IDF File', type='idf')
             epw_uploaded_file = st.file_uploader('Upload EPW File', type='epw')
+            title = st.text_input("Project Name", (idf_uploaded_file.name or "Untitled"))
+            description = st.text_input("Description", "Describe your project here")
             max_sim_time = st.number_input("Maximum Simulation Time (seconds)", min_value=30, max_value=14400, value=300, step=5)
             ea_submitted = st.form_submit_button('Submit')
             if ea_submitted and (not idf_uploaded_file or not epw_uploaded_file):
@@ -108,7 +110,7 @@ with tab2:
                 files = [
                     ('file', (idf_name, idf_uploaded_file, 'text/plain')),
                     ('file', (epw_name, epw_uploaded_file, 'text/plain')),
-                    ('title', 'Python test case'),
+                    ('title', title),
                     ('desc', 'This is test submission made from the API example for Python'),
                     ('split', 'FALSE')
                 ]
