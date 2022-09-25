@@ -63,6 +63,15 @@ if submitted and email and password and idf_uploaded_file and epw_uploaded_file:
     body = {"email": email, "password": password}
     idf_name = idf_uploaded_file.name
     epw_name = epw_uploaded_file.name
+else:
+    if not email:
+        st.warning('Email address is missing', icon="⚠️")
+    if not password:
+        st.warning('Password is missing', icon="⚠️")
+    if not idf_uploaded_file:
+        st.warning('IDF file is missing', icon="⚠️")
+    if not epw_uploaded_file:
+        st.warning('EPW file is missing', icon="⚠️")
 
     # Send request
     r = requests.post(UserApi + 'auth', headers=headers, json=body)
