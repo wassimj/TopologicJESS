@@ -117,7 +117,7 @@ with tab2:
                     ('file', (idf_name, idf_uploaded_file, 'text/plain')),
                     ('file', (epw_name, epw_uploaded_file, 'text/plain')),
                     ('title', title),
-                    ('desc', 'This is test submission made from the API example for Python'),
+                    ('desc', description),
                     ('split', 'FALSE')
                 ]
         if ea_submitted and files:
