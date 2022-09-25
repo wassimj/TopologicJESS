@@ -122,7 +122,7 @@ elif submitted and email and password and idf_uploaded_file and epw_uploaded_fil
                         try:
                             status = r.json()['data']['status']
                             st.session_state['status'] = status
-                            if status != "FINISHED":
+                            if status != "FINISHED" and status != "CANCELLED" and status != "TIMED OUT" and status != "REJECTED":
                                 st.info("Job Status: "+status, icon="ℹ️")
                         except:
                             st.warning('Job Status: UNKNOWN', icon="⚠️")
