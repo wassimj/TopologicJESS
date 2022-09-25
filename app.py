@@ -63,6 +63,7 @@ if submitted and email and password and idf_uploaded_file and epw_uploaded_file:
     ]
 
     with st.spinner("Please wait..."):
+        status = 'UNKNOWN'
         # POST with files
         r = requests.post(JessApi + 'job', files=files, cookies=cookies)
         # Get job_id. This id number will be needed for querying and retrieving the job data
