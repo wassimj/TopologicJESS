@@ -42,12 +42,13 @@ ApiBase = 'https://api.ensims.com/'
 JessApi = ApiBase + "jess_web/api/"
 UserApi = ApiBase + 'users/api/'
 
-with st.form('energy-analysis'):
-    email = st.text_input('Email')
-    password = st.text_input('Password', type='password')
-    idf_uploaded_file = st.file_uploader('Upload IDF File', type='idf')
-    epw_uploaded_file = st.file_uploader('Upload EPW File', type='epw')
-    submitted = st.form_submit_button('Submit')
+with st.expander("Submission Form", expanded="True"):
+    with st.form('energy-analysis'):
+        email = st.text_input('Email')
+        password = st.text_input('Password', type='password')
+        idf_uploaded_file = st.file_uploader('Upload IDF File', type='idf')
+        epw_uploaded_file = st.file_uploader('Upload EPW File', type='epw')
+        submitted = st.form_submit_button('Submit')
 
 if submitted and email and password and idf_uploaded_file and epw_uploaded_file:
     submitted = False
@@ -146,8 +147,8 @@ if st.session_state['status'] == 'FINISHED' and st.session_state['job_id'] and s
     else:
         r = requests.get(JessApi + 'job/file/' + str(job_id) + "/epluszsz.csv", cookies=cookies)
         csv_data = r.content
-    with st.expander("", expanded=True):
-        st.markdown("**Job Results for ID "+str(job_id)+":**")
+    with st.expander("Job Results", expanded=True):
+        st.markdown("**ID "+str(job_id)+":**")
         col1, col2, col3, col4 = st.columns(4, gap="medium")
         with col1:
             err_download_btn = st.download_button(
