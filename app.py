@@ -70,10 +70,10 @@ if submitted and email and password and idf_uploaded_file and epw_uploaded_file:
             job_id = r.json()['data']
             st.session_state['job_id'] = job_id
             st.write("Job Status: SUBMITTED (ID: "+str(job_id)+")")
-            time.sleep(10)
-            r = requests.get(JessApi + 'job/status/' + str(job_id), cookies=cookies)
-            status = r.json()['data']['status']
-            st.write("Job Status: "+status)
+            #time.sleep(10)
+            #r = requests.get(JessApi + 'job/status/' + str(job_id), cookies=cookies)
+            #status = r.json()['data']['status']
+            #st.write("Job Status: "+status)
             i = 0
             while status != 'FINISHED' and status != 'TIMED OUT':
                 # GET job status with job_id
@@ -83,7 +83,10 @@ if submitted and email and password and idf_uploaded_file and epw_uploaded_file:
                     status = "TIMED OUT"
                 else:
                     r = requests.get(JessApi + 'job/status/' + str(job_id), cookies=cookies)
-                    status = r.json()['data']['status']
+                    try:
+                        status = r.json()['data']['status']
+                    except:
+                        status = 'UNKNOWN'
             st.write("Job Status: "+status)
             st.session_state['status'] = status
 
