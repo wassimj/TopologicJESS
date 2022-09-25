@@ -136,26 +136,22 @@ if st.session_state['status'] and st.session_state['job_id'] and st.session_stat
     else:
         r = requests.get(JessApi + 'job/file/' + str(job_id) + "/eplustbl.htm", cookies=cookies)
         htm_data = r.content
-    col1, col2, col3 = st.columns(3)
+    col1, col2, col3, col4 = st.columns(4)
 
     with col1:
-        st.markdown("<h1 style='text-align: left;'>", unsafe_allow_html=True)
         err_download_btn = st.download_button(
                     label="Download ERR file",
                     data=err_data,
                     file_name=str(job_id)+".err",
                     mime="text/plain"
                 )
-        st.markdown("</h1>", unsafe_allow_html=True)
     with col2:
-        st.markdown("<h1 style='text-align: center;'>", unsafe_allow_html=True)
         sql_download_btn = st.download_button(
                     label="Download SQL file",
                     data=sql_data,
                     file_name=str(job_id)+".sql",
                     mime="application/x-sql"
                 )
-        st.markdown("</h1>", unsafe_allow_html=True)
     with col3:
         st.markdown("<h1 style='text-align: right;'>", unsafe_allow_html=True)
         htm_download_btn = st.download_button(
@@ -164,7 +160,6 @@ if st.session_state['status'] and st.session_state['job_id'] and st.session_stat
                     file_name=str(job_id)+".htm",
                     mime="text/html"
                 )
-        st.markdown("</h1>", unsafe_allow_html=True)
     
  
 
