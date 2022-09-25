@@ -223,8 +223,7 @@ with tab3:
                             file_name=str(st.session_state['job_id'])+".csv",
                             mime="text/csv"
                         )
-    else:
-        st.warning('Please log in.', icon="⚠️")
+
 with tab4:
     if st.session_state['cookies']:
         with st.expander("Finished Jobs List", expanded=False):
