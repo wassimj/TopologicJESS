@@ -42,39 +42,40 @@ ApiBase = 'https://api.ensims.com/'
 JessApi = ApiBase + "jess_web/api/"
 UserApi = ApiBase + 'users/api/'
 
-with st.form('Authentication'):
-    email = st.text_input('Email')
-    password = st.text_input('Password', type='password')
-    auth_submitted = st.form_submit_button('Submit')
-if auth_submitted and (not email or not password):
-    if not email:
-        st.warning('Email address is missing', icon="⚠️")
-        st.session_state['cookies'] = None
-    if not password:
-        st.warning('Password is missing', icon="⚠️")
-        st.session_state['cookies'] = None
-elif auth_submitted and email and password:
-    # Set header and body of the POST request
-    headers = {'Content-Type': 'application/json'}
-    body = {"email": email, "password": password}
-    # Send request
-    r = requests.post(UserApi + 'auth', headers=headers, json=body)
-    if not r.json()['ok']:
-        cookies = None
-        st.session_state['cookies'] = None
-        st.error('ERROR: Wrong Credentials', icon="⚠️")
-    else:
-        # Keep the cookies
-        cookies = r.cookies
-        st.session_state['cookies'] = cookies
-        st.success('LOGGED IN', icon="✅")
+if not st.session_state['cookies']:
+    with st.form('Authentication'):
+        email = st.text_input('Email')
+        password = st.text_input('Password', type='password')
+        auth_submitted = st.form_submit_button('Submit')
+        if auth_submitted and (not email or not password):
+            if not email:
+                st.warning('Email address is missing', icon="⚠️")
+                st.session_state['cookies'] = None
+            if not password:
+                st.warning('Password is missing', icon="⚠️")
+                st.session_state['cookies'] = None
+        elif auth_submitted and email and password:
+            # Set header and body of the POST request
+            headers = {'Content-Type': 'application/json'}
+            body = {"email": email, "password": password}
+            # Send request
+            r = requests.post(UserApi + 'auth', headers=headers, json=body)
+            if not r.json()['ok']:
+                cookies = None
+                st.session_state['cookies'] = None
+                st.error('ERROR: Wrong Credentials', icon="⚠️")
+            else:
+                # Keep the cookies
+                cookies = r.cookies
+                st.session_state['cookies'] = cookies
+                st.success('LOGGED IN', icon="✅")
 
-        with st.form('energy-analysis'):
-            idf_uploaded_file = st.file_uploader('Upload IDF File', type='idf')
-            epw_uploaded_file = st.file_uploader('Upload EPW File', type='epw')
-            max_sim_time = st.number_input("Maximum Simulation Time (seconds)", min_value=30, max_value=14400, value=300, step=5)
-            ea_submitted = st.form_submit_button('Submit')
-
+if st.session_state['cookies']:
+    with st.form('energy-analysis'):
+        idf_uploaded_file = st.file_uploader('Upload IDF File', type='idf')
+        epw_uploaded_file = st.file_uploader('Upload EPW File', type='epw')
+        max_sim_time = st.number_input("Maximum Simulation Time (seconds)", min_value=30, max_value=14400, value=300, step=5)
+        ea_submitted = st.form_submit_button('Submit')
         if ea_submitted and (not idf_uploaded_file or not epw_uploaded_file):
             if not idf_uploaded_file:
                 st.warning('IDF file is missing', icon="⚠️")
@@ -152,11 +153,11 @@ elif auth_submitted and email and password:
                         st.session_state['status'] = status
 
 if st.session_state['status']:
-    status = st.session_state['status']
+status = st.session_state['status']
 if st.session_state['job_id']:
-    job_id = st.session_state['job_id']
+job_id = st.session_state['job_id']
 if st.session_state['cookies']:
-    cookies = st.session_state['cookies']
+cookies = st.session_state['cookies']
 if st.session_state['status'] == 'FINISHED' and st.session_state['job_id'] and st.session_state['cookies']:
     # GET specific job output with job_id and file name
     if st.session_state['err_data']:
