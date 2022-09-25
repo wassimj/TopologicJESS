@@ -80,7 +80,7 @@ with tab1:
                         st.session_state['attempts'] = 1
                     else:
                         st.session_state['attempts'] = st.session_state['attempts'] + math.floor(st.session_state['attempts']*0.1)
-        time.sleep(st.session_state['attempts'])
+                        time.sleep(st.session_state['attempts'])
                 else:
                     # Keep the cookies
                     cookies = r.cookies
