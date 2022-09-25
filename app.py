@@ -153,11 +153,11 @@ if st.session_state['cookies']:
                         st.session_state['status'] = status
 
 if st.session_state['status']:
-status = st.session_state['status']
+    status = st.session_state['status']
 if st.session_state['job_id']:
-job_id = st.session_state['job_id']
+    job_id = st.session_state['job_id']
 if st.session_state['cookies']:
-cookies = st.session_state['cookies']
+    cookies = st.session_state['cookies']
 if st.session_state['status'] == 'FINISHED' and st.session_state['job_id'] and st.session_state['cookies']:
     # GET specific job output with job_id and file name
     if st.session_state['err_data']:
