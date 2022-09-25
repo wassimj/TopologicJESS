@@ -72,6 +72,7 @@ if not st.session_state['cookies']:
 
 files = None
 if st.session_state['cookies']:
+    st.success('LOGGED IN', icon="✅")
     with st.form('energy-analysis'):
         idf_uploaded_file = st.file_uploader('Upload IDF File', type='idf')
         epw_uploaded_file = st.file_uploader('Upload EPW File', type='epw')
