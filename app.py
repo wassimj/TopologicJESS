@@ -62,11 +62,12 @@ elif submitted and email and password:
     if not r.json()['ok']:
         cookies = None
         st.session_state['cookies'] = None
-        st.success('LOGGED IN', icon="✅")
+        st.error('ERROR: Wrong Credentials', icon="⚠️")
     else:
         # Keep the cookies
         cookies = r.cookies
         st.session_state['cookies'] = cookies
+        st.success('LOGGED IN', icon="✅")
 
         with st.form('energy-analysis'):
             idf_uploaded_file = st.file_uploader('Upload IDF File', type='idf')
