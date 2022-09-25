@@ -121,6 +121,8 @@ with tab2:
                         job_id = r.json()['data']
                         st.session_state['job_id'] = job_id
                         st.info("Job Status: SUBMITTED (ID: "+str(job_id)+")", icon="ℹ️")
+    else:
+        st.warning('Please log in.', icon="⚠️")
 with tab3:
     if st.session_state['cookies'] and ea_submitted:
         status = 'UNKNOWN'
@@ -165,6 +167,8 @@ with tab3:
                     st.error('Job Status: REJECTED', icon="⚠️")
                 else:
                     st.info("Job Status: "+status)
+    else:
+        st.warning('Please log in.', icon="⚠️")
 
     if st.session_state['status'] == 'FINISHED' and st.session_state['job_id'] and st.session_state['cookies']:
         # GET specific job output with job_id and file name
@@ -219,6 +223,8 @@ with tab3:
                             file_name=str(st.session_state['job_id'])+".csv",
                             mime="text/csv"
                         )
+    else:
+        st.warning('Please log in.', icon="⚠️")
 with tab4:
     if st.session_state['cookies']:
         with st.expander("Finished Jobs List", expanded=False):
@@ -231,4 +237,6 @@ with tab4:
             filter = {"status": "REJECTED"}
             r = requests.get(JessApi + 'jobs', headers={'Content-Type': 'application/json'}, json=filter, cookies=st.session_state['cookies'])
             st.write(r.json())
+    else:
+        st.warning('Please log in.', icon="⚠️")
 
