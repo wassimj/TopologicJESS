@@ -81,17 +81,14 @@ if submitted and email and password and idf_uploaded_file and epw_uploaded_file:
         status = 'UNKNOWN'
         if st.button('Cancel Job'):
             status = 'CANCELLED'
+        else:
         # POST with files
-        r = requests.post(JessApi + 'job', files=files, cookies=cookies)
+            r = requests.post(JessApi + 'job', files=files, cookies=cookies)
         # Get job_id. This id number will be needed for querying and retrieving the job data
-        if r.json()['ok']:
-            job_id = r.json()['data']
-            st.session_state['job_id'] = job_id
-            st.info(" Job Status: SUBMITTED (ID: "+str(job_id)+")", icon="✅")
-            #time.sleep(10)
-            #r = requests.get(JessApi + 'job/status/' + str(job_id), cookies=cookies)
-            #status = r.json()['data']['status']
-            #st.write("Job Status: "+status)
+            if r.json()['ok']:
+                job_id = r.json()['data']
+                st.session_state['job_id'] = job_id
+                st.info("Job Status: SUBMITTED (ID: "+str(job_id)+")", icon="✅")
             i = 0
             while status != 'FINISHED' and status != 'TIMED OUT' and status != 'CANCELLED':
                 # GET job status with job_id
@@ -107,13 +104,13 @@ if submitted and email and password and idf_uploaded_file and epw_uploaded_file:
                         st.warning('Job Status: UNKNOWN', icon="⚠️")
                         status = 'UNKNOWN'
             if status == 'FINISHED':
-                st.success(' Job Status: FINISHED', icon="✅")
+                st.success('Job Status: FINISHED', icon="✅")
             elif status == 'TIMED OUT':
                 st.error(' Job Status: TIMED OUT', icon="⚠️")
             elif status == 'CANCELLED':
-                st.error(' Job Status: CANCELLED', icon="⚠️")
+                st.error('Job Status: CANCELLED', icon="⚠️")
             else:
-                st.info(" Job Status: "+status)
+                st.info("Job Status: "+status)
             st.session_state['status'] = status
 
 if st.session_state['status']:
