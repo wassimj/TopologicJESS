@@ -150,28 +150,28 @@ if st.session_state['status'] == 'FINISHED' and st.session_state['job_id'] and s
 
     with col1:
         err_download_btn = st.download_button(
-                    label="Download ERR",
+                    label="Download  ERR",
                     data=err_data,
                     file_name=str(job_id)+".err",
                     mime="text/plain"
                 )
     with col2:
         sql_download_btn = st.download_button(
-                    label="Download SQL",
+                    label="Download  SQL",
                     data=sql_data,
                     file_name=str(job_id)+".sql",
                     mime="application/x-sql"
                 )
     with col3:
         htm_download_btn = st.download_button(
-                    label="Download HTM",
+                    label="Download  HTM",
                     data=htm_data,
                     file_name=str(job_id)+".htm",
                     mime="text/html"
                 )
     with col4:
         htm_download_btn = st.download_button(
-                    label="Download CSV",
+                    label="Download  CSV",
                     data=csv_data,
                     file_name=str(job_id)+".csv",
                     mime="text/csv"
