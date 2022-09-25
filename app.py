@@ -105,16 +105,18 @@ if submitted and email and password and idf_uploaded_file and epw_uploaded_file:
                     i = i+30
                     if i >= max_sim_time:
                         status = "TIMED OUT"
+                        st.session_state['status'] = status
                         r = requests.post('https://api.ensims.com/jess_web/api/job/' + str(st.session_state['job_id']), headers={'Content-Type': 'application/json'}, json={"cmd": "Cancel"}, cookies=st.session_state['cookies'])
-                        st.write(r.json())
                     else:
                         r = requests.get(JessApi + 'job/status/' + str(job_id), cookies=cookies)
                         try:
                             status = r.json()['data']['status']
+                            st.session_state['status'] = status
                             st.info("Job Status: "+status)
                         except:
                             st.warning('Job Status: UNKNOWN', icon="⚠️")
                             status = 'UNKNOWN'
+                            st.session_state['status'] = status
                 if status == 'FINISHED':
                     st.success('Job Status: FINISHED', icon="✅")
                 elif status == 'TIMED OUT':
