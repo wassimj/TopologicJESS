@@ -50,7 +50,16 @@ with st.form('energy-analysis'):
     max_sim_time = st.number_input("Maximum Simulation Time (seconds)", min_value=30, max_value=14400, value=300, step=5)
     submitted = st.form_submit_button('Submit')
 
-if submitted and email and password and idf_uploaded_file and epw_uploaded_file:
+if submitted and (not email or not password or not idf_uploaded_file or not epw_uploaded_file):
+    if not email:
+        st.warning('Email address is missing', icon="⚠️")
+    if not password:
+        st.warning('Password is missing', icon="⚠️")
+    if not idf_uploaded_file:
+        st.warning('IDF file is missing', icon="⚠️")
+    if not epw_uploaded_file:
+        st.warning('EPW file is missing', icon="⚠️")
+elif submitted and email and password and idf_uploaded_file and epw_uploaded_file:
     submitted = False
     err_data = None
     st.session_state['err_data'] = None
@@ -63,15 +72,7 @@ if submitted and email and password and idf_uploaded_file and epw_uploaded_file:
     body = {"email": email, "password": password}
     idf_name = idf_uploaded_file.name
     epw_name = epw_uploaded_file.name
-elif submitted:
-    if not email:
-        st.warning('Email address is missing', icon="⚠️")
-    if not password:
-        st.warning('Password is missing', icon="⚠️")
-    if not idf_uploaded_file:
-        st.warning('IDF file is missing', icon="⚠️")
-    if not epw_uploaded_file:
-        st.warning('EPW file is missing', icon="⚠️")
+
 
     # Send request
     r = requests.post(UserApi + 'auth', headers=headers, json=body)
