@@ -109,7 +109,7 @@ elif submitted and email and password and idf_uploaded_file and epw_uploaded_fil
                     st.session_state['job_id'] = job_id
                     st.info("Job Status: SUBMITTED (ID: "+str(job_id)+")", icon="✅")
                 i = 0
-                while status != 'FINISHED' and status != 'TIMED OUT' and status != 'CANCELLED':
+                while status != 'FINISHED' and status != 'TIMED OUT' and status != 'CANCELLED' and status != 'REJECTED':
                     # GET job status with job_id
                     time.sleep(30)
                     i = i+30
@@ -134,6 +134,8 @@ elif submitted and email and password and idf_uploaded_file and epw_uploaded_fil
                     st.error(' Job Status: TIMED OUT', icon="⚠️")
                 elif status == 'CANCELLED':
                     st.error('Job Status: CANCELLED', icon="⚠️")
+                elif status == 'REJECTED':
+                    st.error('Job Status: REJECTED', icon="⚠️")
                 else:
                     st.info("Job Status: "+status)
                 st.session_state['status'] = status
