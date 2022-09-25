@@ -47,6 +47,7 @@ with st.form('energy-analysis'):
     password = st.text_input('Password', type='password')
     idf_uploaded_file = st.file_uploader('Upload IDF File', type='idf')
     epw_uploaded_file = st.file_uploader('Upload EPW File', type='epw')
+    max_sim_time = st.number_input("Maximum Simulation Time", min_value=30, max_value=7200, value=300, step=5)
     submitted = st.form_submit_button('Submit')
 
 if submitted and email and password and idf_uploaded_file and epw_uploaded_file:
@@ -98,13 +99,14 @@ if submitted and email and password and idf_uploaded_file and epw_uploaded_file:
                 while status != 'FINISHED' and status != 'TIMED OUT' and status != 'CANCELLED':
                     # GET job status with job_id
                     time.sleep(30)
-                    i = i+5
-                    if i >= 100:
+                    i = i+30
+                    if i >= max_sim_time:
                         status = "TIMED OUT"
                     else:
                         r = requests.get(JessApi + 'job/status/' + str(job_id), cookies=cookies)
                         try:
                             status = r.json()['data']['status']
+                            st.info("Job Status: "+status)
                         except:
                             st.warning('Job Status: UNKNOWN', icon="⚠️")
                             status = 'UNKNOWN'
