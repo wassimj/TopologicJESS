@@ -43,7 +43,7 @@ JessApi = ApiBase + "jess_web/api/"
 UserApi = ApiBase + 'users/api/'
 files = None
 
-tab1, tab2, tab3, tab4 = st.tabs(["Authentication", "Job Submission", "Job Status", "Job History"])
+tab1, tab2, tab3, tab4 = st.tabs(["Authentication", "Submission", "Status", "History"])
 
 with tab1:
     if not st.session_state['cookies']:
