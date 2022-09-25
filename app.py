@@ -57,92 +57,92 @@ elif submitted and email and password:
     body = {"email": email, "password": password}
     # Send request
     r = requests.post(UserApi + 'auth', headers=headers, json=body)
-    st.write(r.json())
+if r.json()['ok']:
     # Keep the cookies
     cookies = r.cookies
     st.session_state['cookies'] = cookies
 
-with st.form('energy-analysis'):
-    idf_uploaded_file = st.file_uploader('Upload IDF File', type='idf')
-    epw_uploaded_file = st.file_uploader('Upload EPW File', type='epw')
-    max_sim_time = st.number_input("Maximum Simulation Time (seconds)", min_value=30, max_value=14400, value=300, step=5)
-    submitted = st.form_submit_button('Submit')
+    with st.form('energy-analysis'):
+        idf_uploaded_file = st.file_uploader('Upload IDF File', type='idf')
+        epw_uploaded_file = st.file_uploader('Upload EPW File', type='epw')
+        max_sim_time = st.number_input("Maximum Simulation Time (seconds)", min_value=30, max_value=14400, value=300, step=5)
+        submitted = st.form_submit_button('Submit')
 
-if submitted and (not idf_uploaded_file or not epw_uploaded_file):
-    if not idf_uploaded_file:
-        st.warning('IDF file is missing', icon="⚠️")
-    if not epw_uploaded_file:
-        st.warning('EPW file is missing', icon="⚠️")
-elif submitted and idf_uploaded_file and epw_uploaded_file:
-    submitted = False
-    err_data = None
-    st.session_state['err_data'] = None
-    sql_data = None
-    st.session_state['sql_data'] = None
-    htm_data = None
-    st.session_state['htm_data'] = None
-    idf_name = idf_uploaded_file.name
-    epw_name = epw_uploaded_file.name
+    if submitted and (not idf_uploaded_file or not epw_uploaded_file):
+        if not idf_uploaded_file:
+            st.warning('IDF file is missing', icon="⚠️")
+        if not epw_uploaded_file:
+            st.warning('EPW file is missing', icon="⚠️")
+    elif submitted and idf_uploaded_file and epw_uploaded_file:
+        submitted = False
+        err_data = None
+        st.session_state['err_data'] = None
+        sql_data = None
+        st.session_state['sql_data'] = None
+        htm_data = None
+        st.session_state['htm_data'] = None
+        idf_name = idf_uploaded_file.name
+        epw_name = epw_uploaded_file.name
     
 
-    # upload a file to a particular folder. Be careful that the file name fields and the model/weather fields must match!
-    # upload a file to a particular folder. Be careful that the file name fields and the model/weather fields must match!
-    files = [
-        ('file', (idf_name, idf_uploaded_file, 'text/plain')),
-        ('file', (epw_name, epw_uploaded_file, 'text/plain')),
-        ('title', 'Python test case'),
-        ('desc', 'This is test submission made from the API example for Python'),
-        ('split', 'FALSE')
-    ]
-    with st.expander("Job Status", expanded=True):
-        with st.spinner("Please wait..."):
-            status = 'UNKNOWN'
-            if st.button('Cancel Job'):
-                status = 'CANCELLED'
-                st.session_state['status'] = status
-                st.warning('Job Status: CANCELLED', icon="⚠️")
-                # Make a post request. Session token must be available in the saved cookies during log-on
-                r = requests.post('https://api.ensims.com/jess_web/api/job/' + str(st.session_state['job_id']), headers={'Content-Type': 'application/json'}, json={"cmd": "Cancel"}, cookies=st.session_state['cookies'])
-                st.write(r.json())
-            else:
-            # POST with files
-                r = requests.post(JessApi + 'job', files=files, cookies=cookies)
-            # Get job_id. This id number will be needed for querying and retrieving the job data
-                if r.json()['ok']:
-                    job_id = r.json()['data']
-                    st.session_state['job_id'] = job_id
-                    st.info("Job Status: SUBMITTED (ID: "+str(job_id)+")", icon="✅")
-                i = 0
-                while status != 'FINISHED' and status != 'TIMED OUT' and status != 'CANCELLED' and status != 'REJECTED':
-                    # GET job status with job_id
-                    time.sleep(30)
-                    i = i+30
-                    if i >= max_sim_time:
-                        status = "TIMED OUT"
-                        st.session_state['status'] = status
-                        r = requests.post('https://api.ensims.com/jess_web/api/job/' + str(st.session_state['job_id']), headers={'Content-Type': 'application/json'}, json={"cmd": "Cancel"}, cookies=st.session_state['cookies'])
-                    else:
-                        r = requests.get(JessApi + 'job/status/' + str(job_id), cookies=cookies)
-                        try:
-                            status = r.json()['data']['status']
-                            st.session_state['status'] = status
-                            if status != "FINISHED" and status != "CANCELLED" and status != "TIMED OUT" and status != "REJECTED":
-                                st.info("Job Status: "+status, icon="ℹ️")
-                        except:
-                            st.warning('Job Status: UNKNOWN', icon="⚠️")
-                            status = 'UNKNOWN'
-                            st.session_state['status'] = status
-                if status == 'FINISHED':
-                    st.success('Job Status: FINISHED', icon="✅")
-                elif status == 'TIMED OUT':
-                    st.error(' Job Status: TIMED OUT', icon="⚠️")
-                elif status == 'CANCELLED':
-                    st.error('Job Status: CANCELLED', icon="⚠️")
-                elif status == 'REJECTED':
-                    st.error('Job Status: REJECTED', icon="⚠️")
+        # upload a file to a particular folder. Be careful that the file name fields and the model/weather fields must match!
+        # upload a file to a particular folder. Be careful that the file name fields and the model/weather fields must match!
+        files = [
+            ('file', (idf_name, idf_uploaded_file, 'text/plain')),
+            ('file', (epw_name, epw_uploaded_file, 'text/plain')),
+            ('title', 'Python test case'),
+            ('desc', 'This is test submission made from the API example for Python'),
+            ('split', 'FALSE')
+        ]
+        with st.expander("Job Status", expanded=True):
+            with st.spinner("Please wait..."):
+                status = 'UNKNOWN'
+                if st.button('Cancel Job'):
+                    status = 'CANCELLED'
+                    st.session_state['status'] = status
+                    st.warning('Job Status: CANCELLED', icon="⚠️")
+                    # Make a post request. Session token must be available in the saved cookies during log-on
+                    r = requests.post('https://api.ensims.com/jess_web/api/job/' + str(st.session_state['job_id']), headers={'Content-Type': 'application/json'}, json={"cmd": "Cancel"}, cookies=st.session_state['cookies'])
+                    st.write(r.json())
                 else:
-                    st.info("Job Status: "+status)
-                st.session_state['status'] = status
+                # POST with files
+                    r = requests.post(JessApi + 'job', files=files, cookies=cookies)
+                # Get job_id. This id number will be needed for querying and retrieving the job data
+                    if r.json()['ok']:
+                        job_id = r.json()['data']
+                        st.session_state['job_id'] = job_id
+                        st.info("Job Status: SUBMITTED (ID: "+str(job_id)+")", icon="✅")
+                    i = 0
+                    while status != 'FINISHED' and status != 'TIMED OUT' and status != 'CANCELLED' and status != 'REJECTED':
+                        # GET job status with job_id
+                        time.sleep(30)
+                        i = i+30
+                        if i >= max_sim_time:
+                            status = "TIMED OUT"
+                            st.session_state['status'] = status
+                            r = requests.post('https://api.ensims.com/jess_web/api/job/' + str(st.session_state['job_id']), headers={'Content-Type': 'application/json'}, json={"cmd": "Cancel"}, cookies=st.session_state['cookies'])
+                        else:
+                            r = requests.get(JessApi + 'job/status/' + str(job_id), cookies=cookies)
+                            try:
+                                status = r.json()['data']['status']
+                                st.session_state['status'] = status
+                                if status != "FINISHED" and status != "CANCELLED" and status != "TIMED OUT" and status != "REJECTED":
+                                    st.info("Job Status: "+status, icon="ℹ️")
+                            except:
+                                st.warning('Job Status: UNKNOWN', icon="⚠️")
+                                status = 'UNKNOWN'
+                                st.session_state['status'] = status
+                    if status == 'FINISHED':
+                        st.success('Job Status: FINISHED', icon="✅")
+                    elif status == 'TIMED OUT':
+                        st.error(' Job Status: TIMED OUT', icon="⚠️")
+                    elif status == 'CANCELLED':
+                        st.error('Job Status: CANCELLED', icon="⚠️")
+                    elif status == 'REJECTED':
+                        st.error('Job Status: REJECTED', icon="⚠️")
+                    else:
+                        st.info("Job Status: "+status)
+                    st.session_state['status'] = status
 
 if st.session_state['status']:
     status = st.session_state['status']
