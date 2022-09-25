@@ -79,6 +79,8 @@ if submitted and email and password and idf_uploaded_file and epw_uploaded_file:
 
     with st.spinner("Please wait..."):
         status = 'UNKNOWN'
+        if st.button('Cancel Job'):
+            status = 'CANCELLED'
         # POST with files
         r = requests.post(JessApi + 'job', files=files, cookies=cookies)
         # Get job_id. This id number will be needed for querying and retrieving the job data
@@ -91,7 +93,7 @@ if submitted and email and password and idf_uploaded_file and epw_uploaded_file:
             #status = r.json()['data']['status']
             #st.write("Job Status: "+status)
             i = 0
-            while status != 'FINISHED' and status != 'TIMED OUT':
+            while status != 'FINISHED' and status != 'TIMED OUT' and status != 'CANCELLED':
                 # GET job status with job_id
                 time.sleep(30)
                 i = i+5
@@ -108,6 +110,8 @@ if submitted and email and password and idf_uploaded_file and epw_uploaded_file:
                 st.success(' Job Status: FINISHED', icon="✅")
             elif status == 'TIMED OUT':
                 st.error(' Job Status: TIMED OUT', icon="⚠️")
+            elif status == 'CANCELLED':
+                st.error(' Job Status: CANCELLED', icon="⚠️")
             else:
                 st.info(" Job Status: "+status)
             st.session_state['status'] = status
