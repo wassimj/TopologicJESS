@@ -70,6 +70,7 @@ if not st.session_state['cookies']:
                 st.session_state['cookies'] = cookies
                 st.success('LOGGED IN', icon="✅")
 
+files = None
 if st.session_state['cookies']:
     with st.form('energy-analysis'):
         idf_uploaded_file = st.file_uploader('Upload IDF File', type='idf')
@@ -112,7 +113,7 @@ if st.session_state['cookies']:
                 # Make a post request. Session token must be available in the saved cookies during log-on
                 r = requests.post('https://api.ensims.com/jess_web/api/job/' + str(st.session_state['job_id']), headers={'Content-Type': 'application/json'}, json={"cmd": "Cancel"}, cookies=st.session_state['cookies'])
                 st.write(r.json())
-            else:
+            elif files:
             # POST with files
                 r = requests.post(JessApi + 'job', files=files, cookies=cookies)
             # Get job_id. This id number will be needed for querying and retrieving the job data
