@@ -81,6 +81,7 @@ if submitted and email and password and idf_uploaded_file and epw_uploaded_file:
         status = 'UNKNOWN'
         if st.button('Cancel Job'):
             status = 'CANCELLED'
+            st.session_state['status'] = status
             st.warning('Job Status: CANCELLED', icon="⚠️")
         else:
         # POST with files
@@ -120,7 +121,7 @@ if st.session_state['job_id']:
     job_id = st.session_state['job_id']
 if st.session_state['cookies']:
     cookies = st.session_state['cookies']
-if st.session_state['status'] and st.session_state['job_id'] and st.session_state['cookies']:
+if st.session_state['status'] == 'FINISHED' and st.session_state['job_id'] and st.session_state['cookies']:
     # GET specific job output with job_id and file name
     if st.session_state['err_data']:
         err_data = st.session_state['err_data']
