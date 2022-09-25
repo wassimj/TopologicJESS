@@ -199,6 +199,8 @@ if st.session_state['status'] == 'FINISHED' and st.session_state['job_id'] and s
                         file_name=str(job_id)+".csv",
                         mime="text/csv"
                     )
-    
- 
+
+with st.expanded("Jobs List", expanded="False")
+    r = requests.get(JessApi + 'jobs', headers=headers, cookies=st.session_state['cookies'])
+    st.write(r.json())
 
