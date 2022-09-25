@@ -47,18 +47,24 @@ tab1, tab2, tab3, tab4 = st.tabs(["Authentication", "Submission", "Status", "His
 
 with tab1:
     if not st.session_state['cookies']:
+        with st.expander("Terms of Service", expanded = False):
+            st.markdown("This software is not guaranteed to be free from defects. This software is provided **as is** and you use the software at your own risk. No warranties as to performance, merchantability, fitness for a particular purpose, or any other warranties whether expressed or implied are made. No oral or written communication from or information provided by the authors of this software shall create a warranty. Under no circumstances shall the authors of this software be liable for direct, indirect, special, incidental, or consequential damages resulting from the use, misuse, or inability to use this software, even if the author of this software has been advised of the possibility of such damages.")
         with st.form('Authentication'):
             email = st.text_input('Email')
             password = st.text_input('Password', type='password')
+            agree = st.checkbox('I agree to the terms of service listed above')
             auth_submitted = st.form_submit_button('Submit')
-            if auth_submitted and (not email or not password):
+            if auth_submitted and (not email or not password or not agree):
                 if not email:
                     st.warning('Email address is missing', icon="⚠️")
                     st.session_state['cookies'] = None
                 if not password:
                     st.warning('Password is missing', icon="⚠️")
                     st.session_state['cookies'] = None
-            elif auth_submitted and email and password:
+                if not agree:
+                    st.warning('You have not agreed to the terms of service', icon="⚠️")
+                    st.session_state['cookies'] = None
+            elif auth_submitted and email and password and agree:
                 # Set header and body of the POST request
                 headers = {'Content-Type': 'application/json'}
                 body = {"email": email, "password": password}
