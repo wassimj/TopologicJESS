@@ -71,10 +71,12 @@ if not st.session_state['cookies']:
                 st.session_state['cookies'] = cookies
 
 if st.session_state['cookies']:
-    col1, col2 = st.columns(2, gap="small")
+    col1, col2, col3 = st.columns([2,5,1], gap="small")
     with col1:
         st.success('LOGGED IN', icon="✅")
     with col2:
+        st.write(" ")
+    with col3:
         if st.button('Log Out'):
             cookies = None
             st.session_state['cookies'] = None
