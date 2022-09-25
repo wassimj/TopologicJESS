@@ -74,7 +74,7 @@ with tab1:
                 if not r.json()['ok']:
                     cookies = None
                     st.session_state['cookies'] = None
-                    st.error('ERROR: Wrong Credentials', icon="⚠️")
+                    st.error('Wrong credentials', icon="❌")
                 else:
                     # Keep the cookies
                     cookies = r.cookies
