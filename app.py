@@ -45,21 +45,35 @@ UserApi = ApiBase + 'users/api/'
 with st.form('energy-analysis'):
     email = st.text_input('Email')
     password = st.text_input('Password', type='password')
+    submitted = st.form_submit_button('Submit')
+if submitted and (not email or not password):
+    if not email:
+        st.warning('Email address is missing', icon="⚠️")
+    if not password:
+        st.warning('Password is missing', icon="⚠️")
+elif submitted and email and password:
+    # Set header and body of the POST request
+    headers = {'Content-Type': 'application/json'}
+    body = {"email": email, "password": password}
+    # Send request
+    r = requests.post(UserApi + 'auth', headers=headers, json=body)
+    st.write(r.json())
+    # Keep the cookies
+    cookies = r.cookies
+    st.session_state['cookies'] = cookies
+
+with st.form('energy-analysis'):
     idf_uploaded_file = st.file_uploader('Upload IDF File', type='idf')
     epw_uploaded_file = st.file_uploader('Upload EPW File', type='epw')
     max_sim_time = st.number_input("Maximum Simulation Time (seconds)", min_value=30, max_value=14400, value=300, step=5)
     submitted = st.form_submit_button('Submit')
 
-if submitted and (not email or not password or not idf_uploaded_file or not epw_uploaded_file):
-    if not email:
-        st.warning('Email address is missing', icon="⚠️")
-    if not password:
-        st.warning('Password is missing', icon="⚠️")
+if submitted and (not idf_uploaded_file or not epw_uploaded_file):
     if not idf_uploaded_file:
         st.warning('IDF file is missing', icon="⚠️")
     if not epw_uploaded_file:
         st.warning('EPW file is missing', icon="⚠️")
-elif submitted and email and password and idf_uploaded_file and epw_uploaded_file:
+elif submitted and idf_uploaded_file and epw_uploaded_file:
     submitted = False
     err_data = None
     st.session_state['err_data'] = None
@@ -69,15 +83,7 @@ elif submitted and email and password and idf_uploaded_file and epw_uploaded_fil
     st.session_state['htm_data'] = None
     idf_name = idf_uploaded_file.name
     epw_name = epw_uploaded_file.name
-    # Set header and body of the POST request
-    headers = {'Content-Type': 'application/json'}
-    body = {"email": email, "password": password}
-    # Send request
-    r = requests.post(UserApi + 'auth', headers=headers, json=body)
-
-    # Keep the cookies
-    cookies = r.cookies
-    st.session_state['cookies'] = cookies
+    
 
     # upload a file to a particular folder. Be careful that the file name fields and the model/weather fields must match!
     # upload a file to a particular folder. Be careful that the file name fields and the model/weather fields must match!
