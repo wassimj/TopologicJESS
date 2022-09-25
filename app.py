@@ -94,7 +94,6 @@ with tab2:
                 if not epw_uploaded_file:
                     st.warning('EPW file is missing', icon="⚠️")
             elif ea_submitted and idf_uploaded_file and epw_uploaded_file:
-                ea_submitted = False
                 err_data = None
                 st.session_state['err_data'] = None
                 sql_data = None
