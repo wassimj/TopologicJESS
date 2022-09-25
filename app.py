@@ -153,7 +153,6 @@ if st.session_state['status'] and st.session_state['job_id'] and st.session_stat
                     mime="application/x-sql"
                 )
     with col3:
-        st.markdown("<h1 style='text-align: right;'>", unsafe_allow_html=True)
         htm_download_btn = st.download_button(
                     label="Download HTM file",
                     data=htm_data,
