@@ -199,12 +199,12 @@ if st.session_state['status'] == 'FINISHED' and st.session_state['job_id'] and s
                     )
 
 if st.session_state['cookies']:
-    with st.expander("Finished Jobs List", expanded="False"):
+    with st.expander("Finished Jobs List", expanded=False):
         # GET the list of jobs fit the given criteria
         filter = {"status": "FINISHED"}
         r = requests.get(JessApi + 'jobs', headers={'Content-Type': 'application/json'}, json=filter, cookies=st.session_state['cookies'])
         st.write(r.json())
-    with st.expander("Rejected Jobs List", expanded="False"):
+    with st.expander("Rejected Jobs List", expanded=False):
         # GET the list of jobs fit the given criteria
         filter = {"status": "REJECTED"}
         r = requests.get(JessApi + 'jobs', headers={'Content-Type': 'application/json'}, json=filter, cookies=st.session_state['cookies'])
