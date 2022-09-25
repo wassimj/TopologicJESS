@@ -115,7 +115,7 @@ if st.session_state['cookies']:
                 st.write(r.json())
             elif files:
             # POST with files
-                r = requests.post(JessApi + 'job', files=files, cookies=cookies)
+                r = requests.post(JessApi + 'job', files=files, cookies=st.session_state['cookies'])
             # Get job_id. This id number will be needed for querying and retrieving the job data
                 if r.json()['ok']:
                     job_id = r.json()['data']
