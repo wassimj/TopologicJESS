@@ -67,13 +67,11 @@ elif submitted and email and password and idf_uploaded_file and epw_uploaded_fil
     st.session_state['sql_data'] = None
     htm_data = None
     st.session_state['htm_data'] = None
+    idf_name = idf_uploaded_file.name
+    epw_name = epw_uploaded_file.name
     # Set header and body of the POST request
     headers = {'Content-Type': 'application/json'}
     body = {"email": email, "password": password}
-    idf_name = idf_uploaded_file.name
-    epw_name = epw_uploaded_file.name
-
-
     # Send request
     r = requests.post(UserApi + 'auth', headers=headers, json=body)
 
