@@ -87,6 +87,8 @@ if submitted and email and password and idf_uploaded_file and epw_uploaded_file:
                 status = 'CANCELLED'
                 st.session_state['status'] = status
                 st.warning('Job Status: CANCELLED', icon="⚠️")
+                # Make a post request. Session token must be available in the saved cookies during log-on
+                r = requests.post('https://api.ensims.com/jess_web/api/job/' + str(st.session_state['job_id']), headers={'Content-Type': 'application/json'}, json={"cmd": "Cancel"}, cookies=st.session_state['cookies'])
             else:
             # POST with files
                 r = requests.post(JessApi + 'job', files=files, cookies=cookies)
@@ -102,6 +104,7 @@ if submitted and email and password and idf_uploaded_file and epw_uploaded_file:
                     i = i+30
                     if i >= max_sim_time:
                         status = "TIMED OUT"
+                        r = requests.post('https://api.ensims.com/jess_web/api/job/' + str(st.session_state['job_id']), headers={'Content-Type': 'application/json'}, json={"cmd": "Cancel"}, cookies=st.session_state['cookies'])
                     else:
                         r = requests.get(JessApi + 'job/status/' + str(job_id), cookies=cookies)
                         try:
