@@ -113,24 +113,25 @@ with tab2:
                     ('desc', 'This is test submission made from the API example for Python'),
                     ('split', 'FALSE')
                 ]
-                with st.spinner("Please wait..."):
-                    status = 'UNKNOWN'
+        if ea_submitted:
+            with st.spinner("Please wait..."):
+                status = 'UNKNOWN'
+                st.session_state['status'] = status
+                if st.button('Cancel Job'):
+                    status = 'CANCELLED'
                     st.session_state['status'] = status
-                    if st.button('Cancel Job'):
-                        status = 'CANCELLED'
-                        st.session_state['status'] = status
-                        st.warning('Job Status: CANCELLED', icon="⚠️")
-                        # Make a post request. Session token must be available in the saved cookies during log-on
-                        r = requests.post('https://api.ensims.com/jess_web/api/job/' + str(st.session_state['job_id']), headers={'Content-Type': 'application/json'}, json={"cmd": "Cancel"}, cookies=st.session_state['cookies'])
-                        st.write(r.json())
-                    elif files:
-                    # POST with files
-                        r = requests.post(JessApi + 'job', files=files, cookies=st.session_state['cookies'])
-                    # Get job_id. This id number will be needed for querying and retrieving the job data
-                        if r.json()['ok']:
-                            job_id = r.json()['data']
-                            st.session_state['job_id'] = job_id
-                            st.info("Job Status: SUBMITTED (ID: "+str(job_id)+")", icon="ℹ️")
+                    st.warning('Job Status: CANCELLED', icon="⚠️")
+                    # Make a post request. Session token must be available in the saved cookies during log-on
+                    r = requests.post('https://api.ensims.com/jess_web/api/job/' + str(st.session_state['job_id']), headers={'Content-Type': 'application/json'}, json={"cmd": "Cancel"}, cookies=st.session_state['cookies'])
+                    st.write(r.json())
+                elif files:
+                # POST with files
+                    r = requests.post(JessApi + 'job', files=files, cookies=st.session_state['cookies'])
+                # Get job_id. This id number will be needed for querying and retrieving the job data
+                    if r.json()['ok']:
+                        job_id = r.json()['data']
+                        st.session_state['job_id'] = job_id
+                        st.info("Job Status: SUBMITTED (ID: "+str(job_id)+")", icon="ℹ️")
 with tab3:
     if st.session_state['cookies']:
         with st.expander("Job Status", expanded=True):
