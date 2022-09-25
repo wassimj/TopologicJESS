@@ -131,7 +131,7 @@ if st.session_state['cookies']:
                         st.session_state['status'] = status
                         r = requests.post('https://api.ensims.com/jess_web/api/job/' + str(st.session_state['job_id']), headers={'Content-Type': 'application/json'}, json={"cmd": "Cancel"}, cookies=st.session_state['cookies'])
                     else:
-                        r = requests.get(JessApi + 'job/status/' + str(job_id), cookies=cookies)
+                        r = requests.get(JessApi + 'job/status/' + str(st.session_state['job_id']), cookies=st.session_state['cookies'])
                         try:
                             status = r.json()['data']['status']
                             st.session_state['status'] = status
