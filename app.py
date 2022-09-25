@@ -42,22 +42,27 @@ ApiBase = 'https://api.ensims.com/'
 JessApi = ApiBase + "jess_web/api/"
 UserApi = ApiBase + 'users/api/'
 
-with st.form('energy-analysis'):
+with st.form('Authentication'):
     email = st.text_input('Email')
     password = st.text_input('Password', type='password')
     submitted = st.form_submit_button('Submit')
 if submitted and (not email or not password):
     if not email:
         st.warning('Email address is missing', icon="⚠️")
+        st.session_state['cookies'] = None
     if not password:
         st.warning('Password is missing', icon="⚠️")
+        st.session_state['cookies'] = None
 elif submitted and email and password:
     # Set header and body of the POST request
     headers = {'Content-Type': 'application/json'}
     body = {"email": email, "password": password}
     # Send request
     r = requests.post(UserApi + 'auth', headers=headers, json=body)
-    if r.json()['ok']:
+    if not r.json()['ok']:
+        cookies = None
+        st.session_state['cookies'] = None
+    else:
         # Keep the cookies
         cookies = r.cookies
         st.session_state['cookies'] = cookies
