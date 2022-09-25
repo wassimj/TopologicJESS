@@ -42,13 +42,12 @@ ApiBase = 'https://api.ensims.com/'
 JessApi = ApiBase + "jess_web/api/"
 UserApi = ApiBase + 'users/api/'
 
-with st.expander("Submission Form", expanded="True"):
-    with st.form('energy-analysis'):
-        email = st.text_input('Email')
-        password = st.text_input('Password', type='password')
-        idf_uploaded_file = st.file_uploader('Upload IDF File', type='idf')
-        epw_uploaded_file = st.file_uploader('Upload EPW File', type='epw')
-        submitted = st.form_submit_button('Submit')
+with st.form('energy-analysis'):
+    email = st.text_input('Email')
+    password = st.text_input('Password', type='password')
+    idf_uploaded_file = st.file_uploader('Upload IDF File', type='idf')
+    epw_uploaded_file = st.file_uploader('Upload EPW File', type='epw')
+    submitted = st.form_submit_button('Submit')
 
 if submitted and email and password and idf_uploaded_file and epw_uploaded_file:
     submitted = False
@@ -80,44 +79,44 @@ if submitted and email and password and idf_uploaded_file and epw_uploaded_file:
         ('desc', 'This is test submission made from the API example for Python'),
         ('split', 'FALSE')
     ]
-
-    with st.spinner("Please wait..."):
-        status = 'UNKNOWN'
-        if st.button('Cancel Job'):
-            status = 'CANCELLED'
-            st.session_state['status'] = status
-            st.warning('Job Status: CANCELLED', icon="⚠️")
-        else:
-        # POST with files
-            r = requests.post(JessApi + 'job', files=files, cookies=cookies)
-        # Get job_id. This id number will be needed for querying and retrieving the job data
-            if r.json()['ok']:
-                job_id = r.json()['data']
-                st.session_state['job_id'] = job_id
-                st.info("Job Status: SUBMITTED (ID: "+str(job_id)+")", icon="✅")
-            i = 0
-            while status != 'FINISHED' and status != 'TIMED OUT' and status != 'CANCELLED':
-                # GET job status with job_id
-                time.sleep(30)
-                i = i+5
-                if i >= 100:
-                    status = "TIMED OUT"
-                else:
-                    r = requests.get(JessApi + 'job/status/' + str(job_id), cookies=cookies)
-                    try:
-                        status = r.json()['data']['status']
-                    except:
-                        st.warning('Job Status: UNKNOWN', icon="⚠️")
-                        status = 'UNKNOWN'
-            if status == 'FINISHED':
-                st.success('Job Status: FINISHED', icon="✅")
-            elif status == 'TIMED OUT':
-                st.error(' Job Status: TIMED OUT', icon="⚠️")
-            elif status == 'CANCELLED':
-                st.error('Job Status: CANCELLED', icon="⚠️")
+    with st.expander("Job Status", expanded=True):
+        with st.spinner("Please wait..."):
+            status = 'UNKNOWN'
+            if st.button('Cancel Job'):
+                status = 'CANCELLED'
+                st.session_state['status'] = status
+                st.warning('Job Status: CANCELLED', icon="⚠️")
             else:
-                st.info("Job Status: "+status)
-            st.session_state['status'] = status
+            # POST with files
+                r = requests.post(JessApi + 'job', files=files, cookies=cookies)
+            # Get job_id. This id number will be needed for querying and retrieving the job data
+                if r.json()['ok']:
+                    job_id = r.json()['data']
+                    st.session_state['job_id'] = job_id
+                    st.info("Job Status: SUBMITTED (ID: "+str(job_id)+")", icon="✅")
+                i = 0
+                while status != 'FINISHED' and status != 'TIMED OUT' and status != 'CANCELLED':
+                    # GET job status with job_id
+                    time.sleep(30)
+                    i = i+5
+                    if i >= 100:
+                        status = "TIMED OUT"
+                    else:
+                        r = requests.get(JessApi + 'job/status/' + str(job_id), cookies=cookies)
+                        try:
+                            status = r.json()['data']['status']
+                        except:
+                            st.warning('Job Status: UNKNOWN', icon="⚠️")
+                            status = 'UNKNOWN'
+                if status == 'FINISHED':
+                    st.success('Job Status: FINISHED', icon="✅")
+                elif status == 'TIMED OUT':
+                    st.error(' Job Status: TIMED OUT', icon="⚠️")
+                elif status == 'CANCELLED':
+                    st.error('Job Status: CANCELLED', icon="⚠️")
+                else:
+                    st.info("Job Status: "+status)
+                st.session_state['status'] = status
 
 if st.session_state['status']:
     status = st.session_state['status']
