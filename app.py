@@ -7,10 +7,14 @@ import os
 import streamlit as st
 import math
 
+import sqlite3
+
 # PAGE CONFIGURATION
 st.set_page_config(
     page_title="Topologic JESS Test Application",
     page_icon="🏢")
+con = sqlite3.connect("test.db")
+st.write("CONNECTION", con)
 
 submitted = False
 
